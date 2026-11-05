@@ -264,13 +264,10 @@
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Procedimento</label>
-                <select id="ag-procedimento" onchange="aoMudarProcedimento()" required class="w-full bg-white/90 border border-nude-200 rounded-xl px-3.5 py-2.5 text-xs font-medium focus:ring-2 focus:ring-gold-400 focus:outline-none">
-                  <option value="Unha em Gel" data-duracao="120" data-preco="180">Unha em Gel (2h) - R$ 180,00</option>
-                  <option value="Manutenção Gel" data-duracao="90" data-preco="120">Manutenção Gel (1h30) - R$ 120,00</option>
-                  <option value="Banho de Gel" data-duracao="90" data-preco="110">Banho de Gel (1h30) - R$ 110,00</option>
-                  <option value="Esmaltação em Gel" data-duracao="60" data-preco="85">Esmaltação em Gel (1h) - R$ 85,00</option>
-                </select>
+                <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Seleção de Serviços (Múltiplos)</label>
+                <div id="container-selecao-servicos" class="max-h-48 overflow-y-auto custom-scrollbar border border-nude-200 rounded-xl p-2.5 bg-white/90 space-y-2 text-xs">
+                  <!-- Renderizado via JS dinamicamente com os serviços da tabela -->
+                </div>
               </div>
 
               <div class="grid grid-cols-2 gap-3">
@@ -286,12 +283,12 @@
 
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Duração (Min)</label>
+                  <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Duração Total (Min)</label>
                   <input type="number" id="ag-duracao" readonly class="w-full bg-nude-100 border border-nude-200 rounded-xl px-3 py-2 text-xs font-bold text-studioText cursor-not-allowed">
                 </div>
                 <div>
-                  <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Valor (R$)</label>
-                  <input type="number" step="0.01" id="ag-valor" required class="w-full bg-white/90 border border-nude-200 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-gold-400 focus:outline-none">
+                  <label class="block text-[11px] font-bold text-studioText uppercase mb-1">Valor Total (R$)</label>
+                  <input type="number" step="0.01" id="ag-valor" required class="w-full bg-white/90 border border-nude-200 rounded-xl px-3 py-2 text-xs font-bold text-gold-600 focus:ring-2 focus:ring-gold-400 focus:outline-none">
                 </div>
               </div>
 
@@ -553,6 +550,45 @@
 
   <!-- JAVASCRIPT PRINCIPAL E REGRAS DE NEGÓCIO -->
   <script>
+    // TABELA OFICIAL DE SERVIÇOS MILLENA AGUIAR STUDIO
+    const TABELA_SERVICOS = [
+      // ALONGAMENTO
+      { cat: 'Alongamento', nome: 'Quadrada (Alongamento)', preco: 275.00, duracao: 120 },
+      { cat: 'Alongamento', nome: 'Quadrada - Manutenção', preco: 140.00, duracao: 90 },
+      { cat: 'Alongamento', nome: 'Ballerina (Alongamento)', preco: 285.00, duracao: 120 },
+      { cat: 'Alongamento', nome: 'Ballerina - Manutenção', preco: 145.00, duracao: 90 },
+      { cat: 'Alongamento', nome: 'Almond (Alongamento)', preco: 295.00, duracao: 120 },
+      { cat: 'Alongamento', nome: 'Almond - Manutenção', preco: 155.00, duracao: 90 },
+      { cat: 'Alongamento', nome: 'Stiletto (Alongamento)', preco: 305.00, duracao: 120 },
+      { cat: 'Alongamento', nome: 'Stiletto - Manutenção', preco: 165.00, duracao: 90 },
+
+      // BANHO DE GEL
+      { cat: 'Banho de Gel', nome: 'Banho de Gel', preco: 140.00, duracao: 90 },
+      { cat: 'Banho de Gel', nome: 'Blindagem Mãos', preco: 80.00, duracao: 60 },
+      { cat: 'Banho de Gel', nome: 'Blindagem Pés', preco: 75.00, duracao: 60 },
+
+      // MANICURE & PEDICURE
+      { cat: 'Manicure & Pedicure', nome: 'Manicure Simples', preco: 35.00, duracao: 40 },
+      { cat: 'Manicure & Pedicure', nome: 'Manicure Decorada', preco: 40.00, duracao: 50 },
+      { cat: 'Manicure & Pedicure', nome: 'Pedicure Simples', preco: 45.00, duracao: 45 },
+      { cat: 'Manicure & Pedicure', nome: 'Pedicure Decorada', preco: 50.00, duracao: 60 },
+      { cat: 'Manicure & Pedicure', nome: 'Spa dos Pés', preco: 85.00, duracao: 60 },
+
+      // DECORAÇÕES
+      { cat: 'Decorações', nome: 'Esmaltação em Gel', preco: 40.00, duracao: 40 },
+      { cat: 'Decorações', nome: 'Encapsuladas', preco: 50.00, duracao: 30 },
+      { cat: 'Decorações', nome: 'Reversa (por unha)', preco: 30.00, duracao: 20 },
+      { cat: 'Decorações', nome: 'Pedrarias (par)', preco: 15.00, duracao: 15 },
+
+      // COBRANÇAS À PARTE
+      { cat: 'Cobranças à Parte', nome: 'Reposição Fibra', preco: 25.00, duracao: 20 },
+      { cat: 'Cobranças à Parte', nome: 'Realinhamento', preco: 55.00, duracao: 30 },
+      { cat: 'Cobranças à Parte', nome: 'Retirada', preco: 95.00, duracao: 45 },
+      { cat: 'Cobranças à Parte', nome: 'Troca de Formato', preco: 55.00, duracao: 40 },
+      { cat: 'Cobranças à Parte', nome: 'Conserto (por unha)', preco: 30.00, duracao: 20 },
+      { cat: 'Cobranças à Parte', nome: 'Combinho', preco: 55.00, duracao: 45 }
+    ];
+
     // ESTADO LOCALPERSISTENTE DA APLICAÇÃO
     let agendamentos = JSON.parse(localStorage.getItem('ma_agendamentos_v2')) || [];
     let estoque = JSON.parse(localStorage.getItem('ma_estoque_v2')) || [
@@ -570,10 +606,61 @@
       document.getElementById('filtro-data-agenda').value = hojeIso;
       document.getElementById('gasto-data').value = hojeIso;
       
-      aoMudarProcedimento();
+      renderCheckboxesServicos();
       salvarTudo();
       renderTudo();
     };
+
+    function renderCheckboxesServicos() {
+      const container = document.getElementById('container-selecao-servicos');
+      container.innerHTML = '';
+
+      let catAtual = '';
+      TABELA_SERVICOS.forEach((srv, idx) => {
+        if (srv.cat !== catAtual) {
+          catAtual = srv.cat;
+          const tituloCat = document.createElement('div');
+          tituloCat.className = 'font-bold text-[10px] uppercase tracking-wider text-gold-600 pt-1 pb-0.5 border-b border-nude-100';
+          tituloCat.innerText = catAtual;
+          container.appendChild(tituloCat);
+        }
+
+        const item = document.createElement('label');
+        item.className = 'flex items-center justify-between p-1 hover:bg-nude-50 rounded cursor-pointer text-xs';
+        item.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <input type="checkbox" name="srv_check" value="${idx}" onchange="recalcularTotaisServicos()" class="rounded text-gold-500 focus:ring-gold-400">
+            <span class="font-medium text-studioText">${srv.nome}</span>
+          </div>
+          <span class="font-bold text-gold-700">${formatarMoeda(srv.preco)}</span>
+        `;
+        container.appendChild(item);
+      });
+
+      // Marcar a primeira opção por padrão
+      const firstCheck = container.querySelector('input[name="srv_check"]');
+      if (firstCheck) {
+        firstCheck.checked = true;
+        recalcularTotaisServicos();
+      }
+    }
+
+    function recalcularTotaisServicos() {
+      const checkboxes = document.querySelectorAll('input[name="srv_check"]:checked');
+      let valorTotal = 0;
+      let duracaoTotal = 0;
+
+      checkboxes.forEach(chk => {
+        const srv = TABELA_SERVICOS[chk.value];
+        if (srv) {
+          valorTotal += srv.preco;
+          duracaoTotal += srv.duracao;
+        }
+      });
+
+      document.getElementById('ag-valor').value = valorTotal;
+      document.getElementById('ag-duracao').value = duracaoTotal || 60;
+    }
 
     function salvarTudo() {
       localStorage.setItem('ma_agendamentos_v2', JSON.stringify(agendamentos));
@@ -607,13 +694,6 @@
       renderAgenda();
     }
 
-    function aoMudarProcedimento() {
-      const select = document.getElementById('ag-procedimento');
-      const opt = select.options[select.selectedIndex];
-      document.getElementById('ag-duracao').value = opt.getAttribute('data-duracao');
-      document.getElementById('ag-valor').value = opt.getAttribute('data-preco');
-    }
-
     // VERIFICAÇÃO DE SOBREPOSIÇÃO (DOUBLE BOOKING)
     function verificarConflitoHorario(data, horaInicio, duracaoMin, idIgnorar = null) {
       const inicioNov = toMinutes(horaInicio);
@@ -627,12 +707,24 @@
       });
     }
 
-    // CADASTRO DE NOVO AGENDAMENTO
+    // CADASTRO DE NOVO AGENDAMENTO COM MÚLTIPLOS SERVIÇOS
     function salvarNovoAgendamento(e) {
       e.preventDefault();
 
       const cliente = document.getElementById('ag-cliente').value;
-      const procedimento = document.getElementById('ag-procedimento').value;
+      const checkboxes = document.querySelectorAll('input[name="srv_check"]:checked');
+      
+      if (checkboxes.length === 0) {
+        alert('Por favor, selecione pelo menos 1 serviço da lista.');
+        return;
+      }
+
+      const servicosSelecionados = [];
+      checkboxes.forEach(chk => {
+        servicosSelecionados.push(TABELA_SERVICOS[chk.value].nome);
+      });
+
+      const procedimento = servicosSelecionados.join(' + ');
       const data = document.getElementById('ag-data').value;
       const hora = document.getElementById('ag-hora').value;
       const duracao = document.getElementById('ag-duracao').value;
@@ -640,7 +732,7 @@
       const pagamento = document.getElementById('ag-pagamento').value;
 
       if (verificarConflitoHorario(data, hora, duracao)) {
-        alert(' Horário Bloqueado! Já existe outro procedimento agendado para esse mesmo intervalo de tempo.');
+        alert('⚠️ Horário Bloqueado! Já existe outro procedimento agendado para esse mesmo intervalo de tempo.');
         return;
       }
 
@@ -681,10 +773,10 @@
 
       // Abrir Modal de Sugestão
       document.getElementById('retorno-cliente').value = item.cliente;
-      document.getElementById('retorno-procedimento').value = item.procedimento.includes('Manutenção') ? item.procedimento : `Manutenção ${item.procedimento}`;
+      document.getElementById('retorno-procedimento').value = item.procedimento.includes('Manutenção') ? item.procedimento : `Manutenção - ${item.procedimento}`;
       document.getElementById('retorno-data').value = dataRetornoSug;
       document.getElementById('retorno-hora').value = item.hora;
-      document.getElementById('retorno-valor').value = item.valor * 0.75; // Valor de Manutenção estimado
+      document.getElementById('retorno-valor').value = item.valor * 0.75; // Valor estimado para retorno
 
       document.getElementById('retorno-subtitulo').innerText = `Sugerindo retorno em 15 dias para ${item.cliente}`;
       document.getElementById('modal-retorno').classList.remove('hidden');
@@ -705,7 +797,7 @@
       const duracao = '90';
 
       if (verificarConflitoHorario(data, hora, duracao)) {
-        alert(' A data/horário de retorno sugerida possui outro agendamento. Por favor, selecione outro horário.');
+        alert('⚠️ A data/horário de retorno sugerida possui outro agendamento. Por favor, selecione outro horário.');
         return;
       }
 

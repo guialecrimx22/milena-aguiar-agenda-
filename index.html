@@ -24,7 +24,7 @@
       color: #2D2623;
     }
 
-    /* Fundo Dual: Topo Branco, Base Bege Nude e LED Neon Dourado */
+    /* Fundo Dual Original: Topo Branco, Base Bege Nude e LED Neon Dourado */
     .studio-bg {
       background: linear-gradient(180deg, 
         #FFFFFF 0%, 
@@ -105,15 +105,15 @@
 
   <div class="led-neon-gold"></div>
 
-  <!-- Cabeçalho Principal (Topo Branco) -->
+  <!-- Cabeçalho Principal (Topo Branco com Logo Original) -->
   <header class="pt-8 pb-6 px-4 max-w-4xl mx-auto text-center relative z-20">
-    <!-- Logotipo MA Cursivo SVG em Ouro -->
+    <!-- Logotipo MA Cursivo SVG Original em Ouro -->
     <div class="flex justify-center mb-2">
-      <svg width="90" height="45" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 35C20 35 25 15 35 15C42 15 40 35 48 35C55 35 58 20 65 20C70 20 72 35 85 35" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M25 25C30 20 40 20 45 25" stroke="url(#goldGradient)" stroke-width="2" stroke-linecap="round"/>
+      <svg width="110" height="55" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 40C24 40 30 18 42 18C50 18 47 40 58 40C66 40 70 22 78 22C84 22 87 40 102 40" stroke="url(#goldGradient)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M30 30C36 24 48 24 54 30" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linecap="round"/>
         <defs>
-          <linearGradient id="goldGradient" x1="0" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse">
+          <linearGradient id="goldGradient" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse">
             <stop stop-color="#D4AF37"/>
             <stop offset="0.5" stop-color="#FFD700"/>
             <stop offset="1" stop-color="#AA771C"/>
@@ -122,22 +122,22 @@
       </svg>
     </div>
     
-    <h1 class="text-xl font-bold tracking-wider text-amber-900 uppercase">Millena Aguiar</h1>
-    <p class="text-xs tracking-widest text-amber-800/70 font-medium">STUDIO & NAIL DESIGNER</p>
+    <h1 class="text-xl font-bold tracking-widest text-amber-900 uppercase">Millena Aguiar</h1>
+    <p class="text-xs tracking-[0.25em] text-amber-800/80 font-semibold mt-0.5">S T U D I O</p>
 
-    <!-- Barra de Status Sincronização / Login -->
-    <div class="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/80">
-      <span id="syncStatus" class="inline-flex items-center gap-1 bg-amber-100/80 border border-amber-300 px-3 py-1 rounded-full">
+    <!-- Barra de Sincronização / Botão de Migração do Mac -->
+    <div class="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
+      <span class="inline-flex items-center gap-1.5 bg-white/80 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
         <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
-        <span>Sincronizado na Nuvem</span>
+        <span>Nuvem Conectada</span>
       </span>
-      <button onclick="importarDadosLocais()" id="btnImportar" class="hidden bg-amber-800 text-white px-3 py-1 rounded-full text-xs hover:bg-amber-900 shadow">
-        📥 Migrar Dados do Mac
+      <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
+        📥 Sincronizar Cadastros do Mac
       </button>
     </div>
   </header>
 
-  <!-- Navegação Principal (Segmented Control - Estilo iOS) -->
+  <!-- Navegação Principal (Segmented Control Original) -->
   <nav class="max-w-2xl mx-auto px-4 mb-6 relative z-20">
     <div class="segmented-nav">
       <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
@@ -161,25 +161,25 @@
     <!-- 1. ABA AGENDA -->
     <section id="aba-agenda" class="space-y-6">
       
-      <!-- Ações Rápidas do Topo (Dois Botões) -->
+      <!-- Ações Rápidas: Novo Agendamento vs Registrar Atendimento Direto -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-amber-900 font-bold border-l-4 border-l-amber-500 shadow-sm">
+        <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white/90 transition-all text-amber-900 font-bold border-l-4 border-l-amber-600 shadow-sm">
           <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
             <i data-lucide="calendar-plus" class="w-5 h-5 text-amber-700"></i>
           </div>
           <div class="text-left">
             <div class="text-sm">📅 Novo Agendamento</div>
-            <div class="text-xs font-normal text-stone-500">Para datas futuras (Pendente)</div>
+            <div class="text-xs font-normal text-stone-600">Para dias futuros (Pendente)</div>
           </div>
         </button>
 
-        <button onclick="abrirModalRegistroDireto()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-emerald-950 font-bold border-l-4 border-l-emerald-500 shadow-sm">
+        <button onclick="abrirModalRegistroDireto()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white/90 transition-all text-emerald-950 font-bold border-l-4 border-l-emerald-600 shadow-sm">
           <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
             <i data-lucide="zap" class="w-5 h-5 text-emerald-700"></i>
           </div>
           <div class="text-left">
             <div class="text-sm">⚡ Registrar Atendimento</div>
-            <div class="text-xs font-normal text-stone-500">Lançar serviço já feito (Entrada Direta)</div>
+            <div class="text-xs font-normal text-stone-600">Lançar serviço já feito (Entrada Direta)</div>
           </div>
         </button>
       </div>
@@ -190,24 +190,24 @@
           <i data-lucide="calendar-days" class="w-5 h-5 text-amber-800"></i>
           <span class="font-bold text-stone-800">Atendimentos de:</span>
         </div>
-        <input type="date" id="filtroDataAgenda" onchange="renderizarAgenda()" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <input type="date" id="filtroDataAgenda" onchange="renderizarAgenda()" class="bg-white/90 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
       </div>
 
-      <!-- Resumo do Dia (Cards Pequenos) -->
+      <!-- Resumo do Dia -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div class="apple-card p-3 text-center">
-          <p class="text-xs text-stone-500 font-medium">Agendados</p>
+          <p class="text-xs text-stone-600 font-medium">Agendados</p>
           <p id="statQtdAgendados" class="text-lg font-bold text-stone-800">0</p>
         </div>
         <div class="apple-card p-3 text-center">
-          <p class="text-xs text-stone-500 font-medium">Concluídos</p>
+          <p class="text-xs text-stone-600 font-medium">Concluídos</p>
           <p id="statQtdConcluidos" class="text-lg font-bold text-emerald-700">0</p>
         </div>
         <div class="apple-card p-3 text-center">
-          <p class="text-xs text-stone-500 font-medium">A Receber (Previsto)</p>
+          <p class="text-xs text-stone-600 font-medium">A Receber (Previsto)</p>
           <p id="statValorPendente" class="text-lg font-bold text-amber-700">R$ 0</p>
         </div>
-        <div class="apple-card p-3 text-center bg-emerald-50/80 border-emerald-200">
+        <div class="apple-card p-3 text-center bg-emerald-50/90 border-emerald-200">
           <p class="text-xs text-emerald-800 font-medium">Faturamento Confirmado</p>
           <p id="statValorConcluido" class="text-lg font-bold text-emerald-800">R$ 0</p>
         </div>
@@ -228,26 +228,24 @@
 
     <!-- 2. ABA ESTOQUE -->
     <section id="aba-estoque" class="space-y-6 hidden">
-      <!-- Novo Material -->
       <div class="apple-card p-5">
         <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center gap-2">
           <i data-lucide="plus-circle" class="w-5 h-5 text-amber-800"></i> Cadastrar Insumo / Material
         </h2>
         <form onsubmit="salvarNovoMaterial(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <input type="text" id="matNome" placeholder="Nome (Ex: Gel UV, Lixa 100/180)" required class="sm:col-span-1 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <input type="number" id="matQtd" placeholder="Qtd Inicial" min="0" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <input type="number" id="matMin" placeholder="Qtd Mínima (Alerta)" min="1" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="text" id="matNome" placeholder="Nome (Ex: Gel UV, Lixa 100/180)" required class="sm:col-span-1 bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" id="matQtd" placeholder="Qtd Inicial" min="0" required class="bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" id="matMin" placeholder="Qtd Mínima (Alerta)" min="1" required class="bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
           <button type="submit" class="sm:col-span-3 bg-stone-900 text-white font-semibold py-2.5 rounded-xl hover:bg-black transition-all text-sm">
             Adicionar ao Estoque
           </button>
         </form>
       </div>
 
-      <!-- Lista de Estoque -->
       <div class="apple-card p-5">
         <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center justify-between">
           <span>Materiais Cadastrados</span>
-          <span class="text-xs text-stone-500 font-normal">Ajuste rápido (+ / -) ou Exclua</span>
+          <span class="text-xs text-stone-600 font-normal">Ajuste rápido (+ / -) ou Exclua</span>
         </h2>
         <div id="listaEstoque" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <!-- Injetado Dinamicamente -->
@@ -257,27 +255,25 @@
 
     <!-- 3. ABA GASTOS -->
     <section id="aba-gastos" class="space-y-6 hidden">
-      <!-- Formulário de Novo Gasto -->
       <div class="apple-card p-5">
         <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center gap-2">
           <i data-lucide="minus-circle" class="w-5 h-5 text-rose-700"></i> Registrar Gasto / Despesa do Studio
         </h2>
         <form onsubmit="salvarGasto(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <input type="text" id="gastoDesc" placeholder="Descrição (Ex: Conta de Luz, Gel Novo)" required class="sm:col-span-2 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <input type="number" step="0.01" id="gastoValor" placeholder="Valor (R$)" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-          <select id="gastoCategoria" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="text" id="gastoDesc" placeholder="Descrição (Ex: Conta de Luz, Gel Novo)" required class="sm:col-span-2 bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" step="0.01" id="gastoValor" placeholder="Valor (R$)" required class="bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <select id="gastoCategoria" class="bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
             <option value="Insumos/Materiais">Insumos / Materiais</option>
             <option value="Fixo/Estrutura">Fixo / Estrutura (Aluguel, Luz, Net)</option>
             <option value="Marketing/Outros">Marketing / Outros</option>
           </select>
-          <input type="date" id="gastoData" required class="sm:col-span-2 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="date" id="gastoData" required class="sm:col-span-2 bg-white/90 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
           <button type="submit" class="sm:col-span-2 bg-rose-800 text-white font-semibold py-2.5 rounded-xl hover:bg-rose-900 transition-all text-sm">
             Lançar Despesa
           </button>
         </form>
       </div>
 
-      <!-- Lista de Gastos -->
       <div class="apple-card p-5">
         <h2 class="text-base font-bold text-stone-800 mb-4">Histórico de Gastos</h2>
         <div id="listaGastos" class="space-y-3">
@@ -288,29 +284,26 @@
 
     <!-- 4. ABA DASHBOARD FINANCEIRO -->
     <section id="aba-dashboard" class="space-y-6 hidden">
-      <!-- Seletor de Mês/Ano -->
       <div class="apple-card p-4 flex items-center justify-between">
         <span class="font-bold text-stone-800">Período de Análise:</span>
-        <input type="month" id="filtroMesDash" onchange="renderizarDashboard()" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <input type="month" id="filtroMesDash" onchange="renderizarDashboard()" class="bg-white/90 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
       </div>
 
-      <!-- Cards de Resultado (Entradas, Saídas e Lucro) -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="apple-card p-4 border-l-4 border-l-emerald-500">
-          <p class="text-xs text-stone-500 font-medium">Receita Concluída (Entradas)</p>
+          <p class="text-xs text-stone-600 font-medium">Receita Concluída (Entradas)</p>
           <p id="dashReceita" class="text-xl font-extrabold text-emerald-700">R$ 0,00</p>
         </div>
         <div class="apple-card p-4 border-l-4 border-l-rose-500">
-          <p class="text-xs text-stone-500 font-medium">Despesas Totais (Saídas)</p>
+          <p class="text-xs text-stone-600 font-medium">Despesas Totais (Saídas)</p>
           <p id="dashGastos" class="text-xl font-extrabold text-rose-700">R$ 0,00</p>
         </div>
         <div class="apple-card-dark p-4 border-l-4 border-l-amber-400">
-          <p class="text-xs text-amber-200/80 font-medium">Lucro Líquido Real</p>
+          <p class="text-xs text-amber-200/90 font-medium">Lucro Líquido Real</p>
           <p id="dashLucro" class="text-2xl font-black text-amber-400">R$ 0,00</p>
         </div>
       </div>
 
-      <!-- Gráfico Comparativo Dinâmico -->
       <div class="apple-card p-5">
         <h3 class="text-sm font-bold text-stone-800 mb-4">Balanço do Mês (Entradas vs Saídas)</h3>
         <div class="relative h-64">
@@ -318,7 +311,6 @@
         </div>
       </div>
 
-      <!-- Distribuição por Meio de Pagamento -->
       <div class="apple-card p-5">
         <h3 class="text-sm font-bold text-stone-800 mb-3">Receita por Forma de Pagamento</h3>
         <div id="listaFormasPagamento" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -340,12 +332,11 @@
       </div>
 
       <form onsubmit="salvarAgendamento(event)" class="space-y-4">
-        <!-- Busca de Contatos Integrada (Chrome/Mac/iOS) -->
         <div>
           <label class="block text-xs font-semibold text-stone-600 mb-1">Nome da Cliente</label>
           <div class="flex gap-2">
             <input type="text" id="agNome" placeholder="Digite o nome da cliente" required class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-            <button type="button" onclick="buscarContatoCliente()" title="Buscar nos Contatos / Clientes Salvas" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1">
+            <button type="button" onclick="buscarContatoCliente()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1">
               <i data-lucide="contact" class="w-4 h-4"></i> Contatos
             </button>
           </div>
@@ -362,12 +353,11 @@
             <input type="date" id="agData" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Horário de Inicio</label>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Horário de Início</label>
             <input type="time" id="agHora" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
           </div>
         </div>
 
-        <!-- Tabela de Serviços (Múltipla Seleção) -->
         <div>
           <label class="block text-xs font-semibold text-stone-600 mb-2">Selecione os Serviços:</label>
           <div id="gridServicosForm" class="max-h-48 overflow-y-auto border rounded-xl p-3 bg-stone-50 space-y-2">
@@ -375,11 +365,10 @@
           </div>
         </div>
 
-        <!-- Duração Editável e Valor Total -->
         <div class="grid grid-cols-2 gap-3 bg-amber-50 p-3 rounded-xl border border-amber-200">
           <div>
             <label class="block text-xs font-semibold text-amber-900 mb-1">Duração Total (min)</label>
-            <input type="number" id="agDuracao" min="15" step="5" onchange="atualizarResumoValoresForm()" required class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-sm font-bold text-amber-900 outline-none">
+            <input type="number" id="agDuracao" min="15" step="5" required class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-sm font-bold text-amber-900 outline-none">
           </div>
           <div class="text-right">
             <label class="block text-xs font-semibold text-amber-900 mb-1">Valor Total Estimado</label>
@@ -397,7 +386,7 @@
 
   <!-- MODAL 2: REGISTRO DIRETO DE ATENDIMENTO CONCLUÍDO -->
   <div id="modalRegistroDireto" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto border-t-4 border-t-emerald-500">
+    <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto border-t-4 border-t-emerald-600">
       <div class="flex items-center justify-between mb-4 border-b pb-3">
         <h3 class="font-bold text-emerald-950 text-lg flex items-center gap-2">
           <i data-lucide="zap" class="text-emerald-600"></i> Registrar Atendimento Já Realizado
@@ -427,7 +416,6 @@
           </div>
         </div>
 
-        <!-- Tabela de Serviços -->
         <div>
           <label class="block text-xs font-semibold text-stone-600 mb-2">Serviços Realizados:</label>
           <div id="gridServicosRegForm" class="max-h-44 overflow-y-auto border rounded-xl p-3 bg-stone-50 space-y-2">
@@ -448,7 +436,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: CONCLUIR ATENDIMENTO (AGENDAMENTO FUTURO -> CONCLUÍDO) -->
+  <!-- MODAL 3: CONCLUIR ATENDIMENTO -->
   <div id="modalConcluir" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="apple-card w-full max-w-md p-6">
       <h3 class="font-bold text-stone-800 text-lg mb-2 flex items-center gap-2">
@@ -467,7 +455,6 @@
           </select>
         </div>
 
-        <!-- Sugestão de Retorno em 15 Dias -->
         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
           <label class="flex items-center gap-2 text-xs font-bold text-amber-900">
             <input type="checkbox" id="chkAgendarRetorno" checked onchange="toggleFormRetorno()" class="custom-checkbox w-4 h-4 rounded">
@@ -493,22 +480,18 @@
     </div>
   </div>
 
-  <!-- SCRIPT COMPLETO DAS REGRAS E BANCO DE DADOS -->
+  <!-- SCRIPT DO SISTEMA -->
   <script>
-    // 1. CONFIGURAÇÃO DO FIREBASE (Nuvem em Tempo Real)
     const firebaseConfig = {
       databaseURL: "https://studio-millena-aguiar-default-rtdb.firebaseio.com"
     };
 
-    // Inicializa Firebase se não foi inicializado antes
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
 
-    // 2. TABELA OFICIAL DE SERVIÇOS (MILLENA AGUIAR)
     const TABELA_SERVICOS = [
-      // ALONGAMENTO
       { id: 'alg_quadrada', cat: 'Alongamento', nome: 'Quadrada (Primeira Vez)', preco: 275, duracao: 150 },
       { id: 'alg_quadrada_manut', cat: 'Alongamento', nome: 'Quadrada (Manutenção)', preco: 140, duracao: 120 },
       { id: 'alg_ballerina', cat: 'Alongamento', nome: 'Ballerina (Primeira Vez)', preco: 285, duracao: 150 },
@@ -517,26 +500,18 @@
       { id: 'alg_almond_manut', cat: 'Alongamento', nome: 'Almond (Manutenção)', preco: 155, duracao: 120 },
       { id: 'alg_stiletto', cat: 'Alongamento', nome: 'Stiletto (Primeira Vez)', preco: 305, duracao: 150 },
       { id: 'alg_stiletto_manut', cat: 'Alongamento', nome: 'Stiletto (Manutenção)', preco: 165, duracao: 120 },
-
-      // BANHO DE GEL
       { id: 'bnh_gel', cat: 'Banho de Gel', nome: 'Banho de Gel', preco: 140, duracao: 90 },
       { id: 'bnh_blindagem_maos', cat: 'Banho de Gel', nome: 'Blindagem Mãos', preco: 80, duracao: 60 },
       { id: 'bnh_blindagem_pes', cat: 'Banho de Gel', nome: 'Blindagem Pés', preco: 75, duracao: 60 },
-
-      // MANICURE & PEDICURE
       { id: 'mani_simples', cat: 'Mani & Pedi', nome: 'Manicure Simples', preco: 35, duracao: 40 },
       { id: 'mani_decorada', cat: 'Mani & Pedi', nome: 'Manicure Decorada', preco: 40, duracao: 50 },
       { id: 'pedi_simples', cat: 'Mani & Pedi', nome: 'Pedicure Simples', preco: 45, duracao: 45 },
       { id: 'pedi_decorada', cat: 'Mani & Pedi', nome: 'Pedicure Decorada', preco: 50, duracao: 55 },
       { id: 'spa_pes', cat: 'Mani & Pedi', nome: 'Spa dos Pés', preco: 85, duracao: 60 },
-
-      // DECORAÇÕES
       { id: 'dec_esmalte_gel', cat: 'Decorações', nome: 'Esmaltação em Gel', preco: 40, duracao: 30 },
       { id: 'dec_encapsulada', cat: 'Decorações', nome: 'Encapsuladas', preco: 50, duracao: 40 },
       { id: 'dec_reversa', cat: 'Decorações', nome: 'Reversa (por unha)', preco: 30, duracao: 20 },
       { id: 'dec_pedrarias', cat: 'Decorações', nome: 'Pedrarias (par)', preco: 15, duracao: 15 },
-
-      // COBRANÇAS À PARTE
       { id: 'cob_reposicao', cat: 'Outros', nome: 'Reposição Fibra', preco: 25, duracao: 20 },
       { id: 'cob_realinhamento', cat: 'Outros', nome: 'Realinhamento', preco: 55, duracao: 40 },
       { id: 'cob_retirada', cat: 'Outros', nome: 'Retirada', preco: 95, duracao: 60 },
@@ -545,7 +520,6 @@
       { id: 'cob_combinho', cat: 'Outros', nome: 'Combinho', preco: 55, duracao: 40 }
     ];
 
-    // ESTADO DA APLICAÇÃO
     let appState = {
       agendamentos: [],
       estoque: [],
@@ -555,7 +529,6 @@
     let agendamentoSelecionadoId = null;
     let chartFinanceiroInstance = null;
 
-    // INICIALIZAÇÃO
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       
@@ -564,16 +537,13 @@
       document.getElementById('agData').value = hoje;
       document.getElementById('regData').value = hoje;
       document.getElementById('gastoData').value = hoje;
-
-      const mesAtual = hoje.substring(0, 7);
-      document.getElementById('filtroMesDash').value = mesAtual;
+      document.getElementById('filtroMesDash').value = hoje.substring(0, 7);
 
       renderizarOpcoesServicosForm();
       conectarFirebaseEmTempoReal();
-      verificarDadosLocaisParaMigracao();
+      verificarDadosLocaisMac();
     });
 
-    // CONEXÃO FIREBASE (SINCRO EM TEMPO REAL)
     function conectarFirebaseEmTempoReal() {
       db.ref('studio_data').on('value', (snapshot) => {
         const data = snapshot.val();
@@ -582,7 +552,7 @@
           appState.estoque = data.estoque ? Object.values(data.estoque) : [];
           appState.gastos = data.gastos ? Object.values(data.gastos) : [];
         } else {
-          carregarDadosIniciaisEstoqueSeVazio();
+          carregarEstoqueInicial();
         }
         atualizarTudo();
       });
@@ -592,8 +562,7 @@
       db.ref('studio_data').set(appState);
     }
 
-    // CARREGAR ESTOQUE INICIAL SE ESTIVER VAZIO
-    function carregarDadosIniciaisEstoqueSeVazio() {
+    function carregarEstoqueInicial() {
       if (appState.estoque.length === 0) {
         appState.estoque = [
           { id: '1', nome: 'Gel UV Construtor', qtd: 4, min: 2 },
@@ -605,16 +574,17 @@
       }
     }
 
-    // MIGRAÇÃO DE DADOS LOCAIS DO MACBOOK
-    function verificarDadosLocaisParaMigracao() {
+    // COMO SALVAR / MIGRAR OS DADOS DO MACBOOK PARA A NUVEM:
+    function verificarDadosLocaisMac() {
+      // O navegador do seu MacBook pode ter guardado agendamentos no armazenamento local (localStorage)
       const agLocal = localStorage.getItem('ma_agendamentos');
       if (agLocal) {
-        document.getElementById('btnImportar').classList.remove('hidden');
+        document.getElementById('btnImportarMac').classList.remove('hidden');
       }
     }
 
-    function importarDadosLocais() {
-      if (confirm("Deseja importar as clientes e registros salvos localmente neste computador para a nuvem?")) {
+    function importarDadosLocaisDoMac() {
+      if (confirm("Deseja enviar todas as clientes já agendadas e registradas no seu MacBook para a Nuvem? Assim elas aparecerão no seu celular na mesma hora!")) {
         const ag = JSON.parse(localStorage.getItem('ma_agendamentos') || '[]');
         const est = JSON.parse(localStorage.getItem('ma_estoque') || '[]');
         const gst = JSON.parse(localStorage.getItem('ma_gastos') || '[]');
@@ -625,27 +595,21 @@
 
         salvarNuvem();
         localStorage.clear();
-        document.getElementById('btnImportar').classList.add('hidden');
-        alert("Dados migrados com sucesso para a nuvem!");
+        document.getElementById('btnImportarMac').classList.add('hidden');
+        alert("Pronto! Seus agendamentos do Mac foram salvos na nuvem com sucesso!");
       }
     }
 
-    // NAVEGAÇÃO ENTRE ABAS
     function mudarAba(aba) {
       ['agenda', 'estoque', 'gastos', 'dashboard'].forEach(a => {
         document.getElementById(`aba-${a}`).classList.add('hidden');
         document.getElementById(`tab-${a}`).classList.remove('active');
       });
-
       document.getElementById(`aba-${aba}`).classList.remove('hidden');
       document.getElementById(`tab-${aba}`).classList.add('active');
-
-      if (aba === 'dashboard') {
-        renderizarDashboard();
-      }
+      if (aba === 'dashboard') renderizarDashboard();
     }
 
-    // RENDERIZAR OPÇÕES DE SERVIÇOS NOS FORMULÁRIOS
     function renderizarOpcoesServicosForm() {
       const containerAg = document.getElementById('gridServicosForm');
       const containerReg = document.getElementById('gridServicosRegForm');
@@ -662,24 +626,17 @@
           </label>
         `;
       });
-
       containerAg.innerHTML = html;
-
-      let htmlReg = html.replace(/chk-servico/g, 'chk-servico-reg').replace(/calcularTotaisServicosForm/g, 'calcularTotaisServicosRegForm');
-      containerReg.innerHTML = htmlReg;
+      containerReg.innerHTML = html.replace(/chk-servico/g, 'chk-servico-reg').replace(/calcularTotaisServicosForm/g, 'calcularTotaisServicosRegForm');
     }
 
-    // CÁLCULOS DOS SERVIÇOS SELECIONADOS NO AGENDAMENTO
     function calcularTotaisServicosForm() {
       const checkboxes = document.querySelectorAll('.chk-servico:checked');
-      let valorTotal = 0;
-      let duracaoTotal = 0;
-
+      let valorTotal = 0, duracaoTotal = 0;
       checkboxes.forEach(c => {
         valorTotal += parseFloat(c.getAttribute('data-preco'));
         duracaoTotal += parseInt(c.getAttribute('data-duracao'));
       });
-
       document.getElementById('agDuracao').value = duracaoTotal || 60;
       document.getElementById('lblValorTotalForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
       document.getElementById('lblValorTotalForm').setAttribute('data-valor', valorTotal);
@@ -688,18 +645,11 @@
     function calcularTotaisServicosRegForm() {
       const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
       let valorTotal = 0;
-      checkboxes.forEach(c => {
-        valorTotal += parseFloat(c.getAttribute('data-preco'));
-      });
+      checkboxes.forEach(c => { valorTotal += parseFloat(c.getAttribute('data-preco')); });
       document.getElementById('lblValorTotalRegForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
       document.getElementById('lblValorTotalRegForm').setAttribute('data-valor', valorTotal);
     }
 
-    function atualizarResumoValoresForm() {
-      // Permite que a Millena edite a duração livremente
-    }
-
-    // BUSCA DE CONTATOS DO MACBOOK / CELULAR
     async function buscarContatoCliente() {
       if ('contacts' in navigator && 'select' in navigator.contacts) {
         try {
@@ -710,32 +660,17 @@
               document.getElementById('agTelefone').value = contacts[0].tel[0].replace(/\D/g, '');
             }
           }
-        } catch (e) {
-          console.log("Busca de contatos cancelada ou não suportada diretamente.");
-        }
+        } catch (e) {}
       } else {
-        const nomeDig = prompt("Digite o nome da cliente para buscar no histórico:");
-        if (nomeDig) {
-          const achada = appState.agendamentos.find(a => a.cliente.toLowerCase().includes(nomeDig.toLowerCase()));
-          if (achada) {
-            document.getElementById('agNome').value = achada.cliente;
-            document.getElementById('agTelefone').value = achada.telefone || '';
-          } else {
-            document.getElementById('agNome').value = nomeDig;
-          }
-        }
+        const nomeDig = prompt("Digite o nome da cliente:");
+        if (nomeDig) document.getElementById('agNome').value = nomeDig;
       }
     }
 
-    // 1. SALVAR NOVO AGENDAMENTO (FUTURO - PENDENTE)
     function salvarAgendamento(e) {
       e.preventDefault();
-
       const checkboxes = document.querySelectorAll('.chk-servico:checked');
-      if (checkboxes.length === 0) {
-        alert("Selecione pelo menos um serviço!");
-        return;
-      }
+      if (checkboxes.length === 0) { alert("Selecione pelo menos um serviço!"); return; }
 
       const servicosNomes = [];
       checkboxes.forEach(c => {
@@ -764,14 +699,10 @@
       atualizarTudo();
     }
 
-    // 2. REGISTRAR ATENDIMENTO JÁ CONCLUÍDO (DIRETO)
     function salvarRegistroDireto(e) {
       e.preventDefault();
       const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
-      if (checkboxes.length === 0) {
-        alert("Selecione pelo menos um serviço realizado!");
-        return;
-      }
+      if (checkboxes.length === 0) { alert("Selecione pelo menos um serviço!"); return; }
 
       const servicosNomes = [];
       checkboxes.forEach(c => {
@@ -800,20 +731,16 @@
       atualizarTudo();
     }
 
-    // CONCLUIR AGENDAMENTO E MARCAR RETORNO
     function abrirConcluirAtendimento(id) {
       agendamentoSelecionadoId = id;
       const item = appState.agendamentos.find(a => a.id === id);
       if (!item) return;
 
       document.getElementById('descClienteConcluir').innerText = `${item.cliente} - ${item.servicos} (R$ ${item.valor.toFixed(2)})`;
-
-      // Data de retorno em 15 dias
       const dataObj = new Date(item.data + 'T12:00:00');
       dataObj.setDate(dataObj.getDate() + 15);
       document.getElementById('retornoData').value = dataObj.toISOString().split('T')[0];
       document.getElementById('retornoHora').value = item.hora;
-
       document.getElementById('modalConcluir').classList.remove('hidden');
     }
 
@@ -823,7 +750,6 @@
         item.status = 'Concluído';
         item.pagamento = document.getElementById('concluirPagamento').value;
 
-        // Se marcou retorno para 15 dias
         if (document.getElementById('chkAgendarRetorno').checked) {
           const retorno = {
             id: (Date.now() + 1).toString(),
@@ -852,7 +778,6 @@
       document.getElementById('formRetorno15Dias').style.display = chk ? 'grid' : 'none';
     }
 
-    // EXCLUIR AGENDAMENTO
     function excluirAgendamento(id) {
       if (confirm("Deseja realmente remover este agendamento?")) {
         appState.agendamentos = appState.agendamentos.filter(a => a.id !== id);
@@ -861,7 +786,6 @@
       }
     }
 
-    // RENDERIZAR AGENDA DO DIA
     function renderizarAgenda() {
       const dataFiltro = document.getElementById('filtroDataAgenda').value;
       const listaContainer = document.getElementById('listaAgendamentos');
@@ -870,18 +794,13 @@
         .filter(a => a.data === dataFiltro)
         .sort((a, b) => a.hora.localeCompare(b.hora));
 
-      let qtdAgendados = filtrados.length;
-      let qtdConcluidos = filtrados.filter(a => a.status === 'Concluído').length;
-      let valorPendente = filtrados.filter(a => a.status === 'Pendente').reduce((acc, a) => acc + a.valor, 0);
-      let valorConcluido = filtrados.filter(a => a.status === 'Concluído').reduce((acc, a) => acc + a.valor, 0);
-
-      document.getElementById('statQtdAgendados').innerText = qtdAgendados;
-      document.getElementById('statQtdConcluidos').innerText = qtdConcluidos;
-      document.getElementById('statValorPendente').innerText = `R$ ${valorPendente.toFixed(2)}`;
-      document.getElementById('statValorConcluido').innerText = `R$ ${valorConcluido.toFixed(2)}`;
+      document.getElementById('statQtdAgendados').innerText = filtrados.length;
+      document.getElementById('statQtdConcluidos').innerText = filtrados.filter(a => a.status === 'Concluído').length;
+      document.getElementById('statValorPendente').innerText = `R$ ${filtrados.filter(a => a.status === 'Pendente').reduce((acc, a) => acc + a.valor, 0).toFixed(2)}`;
+      document.getElementById('statValorConcluido').innerText = `R$ ${filtrados.filter(a => a.status === 'Concluído').reduce((acc, a) => acc + a.valor, 0).toFixed(2)}`;
 
       if (filtrados.length === 0) {
-        listaContainer.innerHTML = `<p class="text-center text-sm text-stone-500 py-6">Nenhum atendimento agendado para esta data.</p>`;
+        listaContainer.innerHTML = `<p class="text-center text-sm text-stone-500 py-6">Nenhum atendimento para esta data.</p>`;
         return;
       }
 
@@ -905,49 +824,39 @@
 
             <div class="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-2 sm:pt-0">
               ${a.telefone ? `
-                <a href="https://wa.me/55${a.telefone}?text=Olá%20${encodeURIComponent(a.cliente)},%20confirmado%20seu%20horário%20no%20Studio%20Millena%20Aguiar!" target="_blank" class="p-2 bg-emerald-100 text-emerald-800 rounded-xl hover:bg-emerald-200" title="Abrir WhatsApp">
+                <a href="https://wa.me/55${a.telefone}?text=Olá%20${encodeURIComponent(a.cliente)},%20passando%20para%20confirmar%20seu%20horário%20no%20Studio%20Millena%20Aguiar!" target="_blank" class="p-2 bg-emerald-100 text-emerald-800 rounded-xl hover:bg-emerald-200" title="WhatsApp">
                   <i data-lucide="message-circle" class="w-4 h-4"></i>
                 </a>
               ` : ''}
-
               ${!isConcluido ? `
-                <button onclick="abrirConcluirAtendimento('${a.id}')" class="bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-emerald-800 transition-all flex items-center gap-1">
+                <button onclick="abrirConcluirAtendimento('${a.id}')" class="bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-emerald-800 flex items-center gap-1">
                   <i data-lucide="check" class="w-3.5 h-3.5"></i> Concluir
                 </button>
               ` : ''}
-
-              <button onclick="excluirAgendamento('${a.id}')" class="p-2 text-stone-400 hover:text-rose-600" title="Excluir">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+              <button onclick="excluirAgendamento('${a.id}')" class="p-2 text-stone-400 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
         `;
       });
-
       listaContainer.innerHTML = html;
       lucide.createIcons();
     }
 
-    // AUXILIAR HORA FIM
     function calcularHoraFim(horaInicio, min) {
       if (!horaInicio) return '';
       const [h, m] = horaInicio.split(':').map(Number);
       const totalMin = h * 60 + m + min;
-      const hFim = Math.floor(totalMin / 60) % 24;
-      const mFim = totalMin % 60;
-      return `${String(hFim).padStart(2, '0')}:${String(mFim).padStart(2, '0')}`;
+      return `${String(Math.floor(totalMin / 60) % 24).padStart(2, '0')}:${String(totalMin % 60).padStart(2, '0')}`;
     }
 
-    // ESTOQUE - SALVAR NOVO E EXCLUIR
     function salvarNovoMaterial(e) {
       e.preventDefault();
-      const novo = {
+      appState.estoque.push({
         id: Date.now().toString(),
         nome: document.getElementById('matNome').value,
         qtd: parseInt(document.getElementById('matQtd').value),
         min: parseInt(document.getElementById('matMin').value)
-      };
-      appState.estoque.push(novo);
+      });
       salvarNuvem();
       document.getElementById('matNome').value = '';
       document.getElementById('matQtd').value = '';
@@ -957,15 +866,11 @@
 
     function alterarQtdEstoque(id, delta) {
       const item = appState.estoque.find(e => e.id === id);
-      if (item) {
-        item.qtd = Math.max(0, item.qtd + delta);
-        salvarNuvem();
-        renderizarEstoque();
-      }
+      if (item) { item.qtd = Math.max(0, item.qtd + delta); salvarNuvem(); renderizarEstoque(); }
     }
 
     function excluirMaterialEstoque(id) {
-      if (confirm("Tem certeza que deseja excluir definitivamente este insumo do estoque?")) {
+      if (confirm("Excluir definitivamente este insumo do estoque?")) {
         appState.estoque = appState.estoque.filter(e => e.id !== id);
         salvarNuvem();
         renderizarEstoque();
@@ -974,11 +879,7 @@
 
     function renderizarEstoque() {
       const container = document.getElementById('listaEstoque');
-      if (appState.estoque.length === 0) {
-        container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4 col-span-2">Nenhum material cadastrado.</p>`;
-        return;
-      }
-
+      if (appState.estoque.length === 0) { container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4 col-span-2">Nenhum material.</p>`; return; }
       let html = '';
       appState.estoque.forEach(e => {
         const baixo = e.qtd <= e.min;
@@ -986,15 +887,13 @@
           <div class="p-3 bg-white rounded-xl border ${baixo ? 'border-rose-400 bg-rose-50/40' : 'border-stone-200'} flex items-center justify-between">
             <div>
               <p class="font-bold text-stone-800 text-sm">${e.nome}</p>
-              <p class="text-xs ${baixo ? 'text-rose-600 font-bold' : 'text-stone-500'}">Status: ${e.qtd} un (Mín: ${e.min})</p>
+              <p class="text-xs ${baixo ? 'text-rose-600 font-bold' : 'text-stone-600'}">Qtd: ${e.qtd} (Mín: ${e.min})</p>
             </div>
             <div class="flex items-center gap-1">
-              <button onclick="alterarQtdEstoque('${e.id}', -1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg hover:bg-stone-200 text-stone-800 text-sm">-</button>
+              <button onclick="alterarQtdEstoque('${e.id}', -1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg">-</button>
               <span class="w-6 text-center font-bold text-sm">${e.qtd}</span>
-              <button onclick="alterarQtdEstoque('${e.id}', 1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg hover:bg-stone-200 text-stone-800 text-sm">+</button>
-              <button onclick="excluirMaterialEstoque('${e.id}')" class="ml-2 text-stone-400 hover:text-rose-600 p-1" title="Excluir produto">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+              <button onclick="alterarQtdEstoque('${e.id}', 1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg">+</button>
+              <button onclick="excluirMaterialEstoque('${e.id}')" class="ml-2 text-stone-400 hover:text-rose-600 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
         `;
@@ -1003,17 +902,15 @@
       lucide.createIcons();
     }
 
-    // GASTOS - SALVAR E EXCLUIR
     function salvarGasto(e) {
       e.preventDefault();
-      const novo = {
+      appState.gastos.push({
         id: Date.now().toString(),
         descricao: document.getElementById('gastoDesc').value,
         valor: parseFloat(document.getElementById('gastoValor').value),
         categoria: document.getElementById('gastoCategoria').value,
         data: document.getElementById('gastoData').value
-      };
-      appState.gastos.push(novo);
+      });
       salvarNuvem();
       document.getElementById('gastoDesc').value = '';
       document.getElementById('gastoValor').value = '';
@@ -1021,7 +918,7 @@
     }
 
     function excluirGasto(id) {
-      if (confirm("Excluir este lançamento de gasto?")) {
+      if (confirm("Excluir gasto?")) {
         appState.gastos = appState.gastos.filter(g => g.id !== id);
         salvarNuvem();
         renderizarGastos();
@@ -1030,24 +927,18 @@
 
     function renderizarGastos() {
       const container = document.getElementById('listaGastos');
-      if (appState.gastos.length === 0) {
-        container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4">Nenhum gasto registrado.</p>`;
-        return;
-      }
-
+      if (appState.gastos.length === 0) { container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4">Nenhum gasto.</p>`; return; }
       let html = '';
       appState.gastos.sort((a,b) => b.data.localeCompare(a.data)).forEach(g => {
         html += `
           <div class="p-3 bg-white rounded-xl border border-stone-200 flex items-center justify-between">
             <div>
               <p class="font-bold text-stone-800 text-sm">${g.descricao}</p>
-              <p class="text-xs text-stone-500">${g.categoria} • ${g.data.split('-').reverse().join('/')}</p>
+              <p class="text-xs text-stone-600">${g.categoria} • ${g.data.split('-').reverse().join('/')}</p>
             </div>
             <div class="flex items-center gap-3">
               <span class="font-extrabold text-rose-700 text-sm">R$ ${g.valor.toFixed(2)}</span>
-              <button onclick="excluirGasto('${g.id}')" class="text-stone-400 hover:text-rose-600">
-                <i data-lucide="trash-2" class="w-4 h-4"></i>
-              </button>
+              <button onclick="excluirGasto('${g.id}')" class="text-stone-400 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
             </div>
           </div>
         `;
@@ -1056,85 +947,45 @@
       lucide.createIcons();
     }
 
-    // DASHBOARD FINANCEIRO E GRÁFICOS
     function renderizarDashboard() {
       const mesFiltro = document.getElementById('filtroMesDash').value;
-
-      // REGRA DE FATURAMENTO: Apenas Atendimentos CONCLUÍDOS
-      const receitaTotal = appState.agendamentos
-        .filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro))
-        .reduce((acc, a) => acc + a.valor, 0);
-
-      const gastosTotais = appState.gastos
-        .filter(g => g.data.startsWith(mesFiltro))
-        .reduce((acc, g) => acc + g.valor, 0);
-
+      const receitaTotal = appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro)).reduce((acc, a) => acc + a.valor, 0);
+      const gastosTotais = appState.gastos.filter(g => g.data.startsWith(mesFiltro)).reduce((acc, g) => acc + g.valor, 0);
       const lucroLiquido = receitaTotal - gastosTotais;
 
       document.getElementById('dashReceita').innerText = `R$ ${receitaTotal.toFixed(2)}`;
       document.getElementById('dashGastos').innerText = `R$ ${gastosTotais.toFixed(2)}`;
       document.getElementById('dashLucro').innerText = `R$ ${lucroLiquido.toFixed(2)}`;
 
-      // Formas de Pagamento
       const pagMap = { 'Pix': 0, 'Cartão de Crédito': 0, 'Cartão de Débito': 0, 'Dinheiro': 0 };
-      appState.agendamentos
-        .filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro))
-        .forEach(a => {
-          if (pagMap[a.pagamento] !== undefined) pagMap[a.pagamento] += a.valor;
-        });
+      appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro)).forEach(a => {
+        if (pagMap[a.pagamento] !== undefined) pagMap[a.pagamento] += a.valor;
+      });
 
       let htmlPag = '';
       Object.keys(pagMap).forEach(k => {
-        htmlPag += `
-          <div class="p-3 bg-stone-50 rounded-xl border text-center">
-            <p class="text-xs text-stone-500 font-semibold">${k}</p>
-            <p class="text-sm font-bold text-stone-800 mt-1">R$ ${pagMap[k].toFixed(2)}</p>
-          </div>
-        `;
+        htmlPag += `<div class="p-3 bg-stone-50 rounded-xl border text-center"><p class="text-xs text-stone-600 font-semibold">${k}</p><p class="text-sm font-bold text-stone-800 mt-1">R$ ${pagMap[k].toFixed(2)}</p></div>`;
       });
       document.getElementById('listaFormasPagamento').innerHTML = htmlPag;
 
-      // Gráfico Canvas Chart.js
       const ctx = document.getElementById('chartFinanceiro').getContext('2d');
       if (chartFinanceiroInstance) chartFinanceiroInstance.destroy();
-
       chartFinanceiroInstance = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['Entradas (Concluídas)', 'Saídas (Gastos)', 'Lucro Líquido'],
-          datasets: [{
-            data: [receitaTotal, gastosTotais, lucroLiquido],
-            backgroundColor: ['#10B981', '#F43F5E', '#D97706'],
-            borderRadius: 10
-          }]
+          datasets: [{ data: [receitaTotal, gastosTotais, lucroLiquido], backgroundColor: ['#10B981', '#F43F5E', '#D97706'], borderRadius: 10 }]
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true } }
-        }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
       });
     }
 
-    // MODAIS CONTROLE
-    function abrirModalAgendamento() {
-      document.getElementById('modalAgendamento').classList.remove('hidden');
-    }
-    function fecharModalAgendamento() {
-      document.getElementById('modalAgendamento').classList.add('hidden');
-    }
-    function abrirModalRegistroDireto() {
-      document.getElementById('modalRegistroDireto').classList.remove('hidden');
-    }
-    function fecharModalRegistroDireto() {
-      document.getElementById('modalRegistroDireto').classList.add('hidden');
-    }
-    function fecharModalConcluir() {
-      document.getElementById('modalConcluir').classList.add('hidden');
-    }
+    function abrirModalAgendamento() { document.getElementById('modalAgendamento').classList.remove('hidden'); }
+    function fecharModalAgendamento() { document.getElementById('modalAgendamento').classList.add('hidden'); }
+    function abrirModalRegistroDireto() { document.getElementById('modalRegistroDireto').classList.remove('hidden'); }
+    function fecharModalRegistroDireto() { document.getElementById('modalRegistroDireto').classList.add('hidden'); }
+    function fecharModalConcluir() { document.getElementById('modalConcluir').classList.add('hidden'); }
 
-    // ATUALIZAÇÃO GERAL
     function atualizarTudo() {
       renderizarAgenda();
       renderizarEstoque();

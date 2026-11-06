@@ -11,56 +11,39 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Google Fonts para Tipografia de Luxo -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #D8C4B6;
-      color: #2D2623;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Topo Branco Sofisticado estilo Mac */
-    .wall-white-top {
       background: #FFFFFF;
-      padding-bottom: 25px;
+      color: #2D2623;
+    }
+
+    /* Layout Clássico do dia 05/11 */
+    .studio-bg {
+      background: linear-gradient(180deg, 
+        #FFFFFF 0%, 
+        #FFFFFF 240px, 
+        #D8C4B6 241px, 
+        #CBB5A5 100%);
+      min-height: 100vh;
       position: relative;
     }
 
-    /* Divisória de LED Natural e Fluida (Curvas Suaves) */
-    .led-wave-divider {
-      width: 100%;
-      overflow: hidden;
-      line-height: 0;
-      position: relative;
-      margin-top: -10px;
-    }
-
-    .led-wave-divider svg {
-      position: relative;
-      display: block;
-      width: 100%;
-      height: 50px;
-    }
-
-    /* Tipografia de Luxo para o Logo */
-    .luxury-logo-initials {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-weight: 700;
-      font-size: 2.8rem;
-      background: linear-gradient(135deg, #C5A059 0%, #FFD700 50%, #996515 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
-      line-height: 1;
+    .led-neon-gold {
+      position: absolute;
+      top: 240px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #FFD700;
+      box-shadow: 0 0 12px #FFD700, 0 0 22px #E6C200;
+      z-index: 10;
     }
 
     /* Vidro Efeito Apple (Glassmorphism) */
@@ -82,9 +65,9 @@
       color: #FFF;
     }
 
-    /* Segmented Control iOS / macOS Style */
+    /* Segmented Control iOS Style */
     .segmented-nav {
-      background: rgba(120, 120, 128, 0.15);
+      background: rgba(120, 120, 128, 0.12);
       padding: 4px;
       border-radius: 14px;
       display: flex;
@@ -113,79 +96,67 @@
     }
   </style>
 </head>
-<body class="pb-12">
+<body class="studio-bg pb-12">
 
-  <!-- TOPO BRANCO COM LOGOTIPO DE LUXO TIPOGRÁFICO -->
-  <div class="wall-white-top shadow-sm">
-    <!-- Barra de Controle macOS Fictícia para dar o charme do Mac -->
-    <div class="px-4 py-2 bg-stone-100 flex items-center gap-1.5 border-b border-stone-200">
-      <div class="w-3 h-3 rounded-full bg-rose-400"></div>
-      <div class="w-3 h-3 rounded-full bg-amber-400"></div>
-      <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
-      <span class="text-[11px] text-stone-500 font-medium ml-2">Millena Aguiar Studio — Safari</span>
+  <div class="led-neon-gold"></div>
+
+  <!-- Cabeçalho Principal Clássico -->
+  <header class="pt-8 pb-4 px-4 max-w-4xl mx-auto text-center relative z-20">
+    <!-- Logotipo Cursivo MA Elegante -->
+    <div class="flex justify-center mb-1">
+      <svg width="120" height="50" viewBox="0 0 120 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 36C20 36 26 12 38 12C45 12 42 36 54 36C62 36 66 16 74 16C80 16 84 36 102 36" stroke="url(#goldGradient)" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M28 26C34 18 46 18 52 26" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="goldGradient" x1="0" y1="0" x2="120" y2="50" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#C5A059"/>
+            <stop offset="0.5" stop-color="#FFD700"/>
+            <stop offset="1" stop-color="#996515"/>
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
+    
+    <h1 class="text-lg font-bold tracking-widest text-amber-900 uppercase">MILLENA AGUIAR</h1>
+    <p class="text-[10px] tracking-[0.25em] text-amber-800/80 font-bold uppercase mt-0.5">NAIL DESIGNER</p>
 
-    <header class="pt-6 pb-2 px-4 max-w-4xl mx-auto text-center relative z-20">
-      <!-- Logotipo Limpo, Elegante e Nítido -->
-      <div class="flex flex-col items-center justify-center">
-        <div class="luxury-logo-initials mb-1">M A</div>
-        <h1 class="text-base font-bold tracking-[0.3em] text-stone-900 uppercase">MILLENA AGUIAR</h1>
-        <div class="flex items-center justify-center gap-2 mt-1">
-          <div class="h-[1px] w-12 bg-amber-700/60"></div>
-          <span class="text-[10px] tracking-[0.25em] font-bold text-amber-800 uppercase">NAIL DESIGNER</span>
-          <div class="h-[1px] w-12 bg-amber-700/60"></div>
-        </div>
-      </div>
+    <!-- Sincronização / Botão de Migração do Mac -->
+    <div class="mt-3 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
+      <span class="inline-flex items-center gap-1.5 bg-white/90 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
+        <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
+        <span>Nuvem Conectada</span>
+      </span>
+      <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
+        📥 Sincronizar Cadastros do Mac
+      </button>
+    </div>
+  </header>
 
-      <!-- Sincronização / Botão de Migração -->
-      <div class="mt-3 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
-        <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
-          <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
-          <span>Nuvem Conectada</span>
-        </span>
-        <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
-          📥 Sincronizar Cadastros do Mac
-        </button>
-      </div>
-    </header>
-  </div>
+  <!-- Navegação Principal (Segmented Control Original) -->
+  <nav class="max-w-2xl mx-auto px-4 mb-6 relative z-20">
+    <div class="segmented-nav">
+      <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
+        <i data-lucide="calendar" class="w-4 h-4"></i> Agenda
+      </button>
+      <button onclick="mudarAba('estoque')" id="tab-estoque" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="package" class="w-4 h-4"></i> Estoque
+      </button>
+      <button onclick="mudarAba('gastos')" id="tab-gastos" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="receipt" class="w-4 h-4"></i> Gastos
+      </button>
+      <button onclick="mudarAba('dashboard')" id="tab-dashboard" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="pie-chart" class="w-4 h-4"></i> Financeiro
+      </button>
+    </div>
+  </nav>
 
-  <!-- FITA DE LED NATURAL E ONDULADA -->
-  <div class="led-wave-divider">
-    <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
-      <!-- Glow do LED -->
-      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30 L1200,0 L0,0 Z" fill="#FFD700" opacity="0.35" filter="blur(6px)"></path>
-      <!-- Filamento Dourado Natural -->
-      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30" fill="none" stroke="#FFFFFF" stroke-width="3"></path>
-      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30" fill="none" stroke="#FFD700" stroke-width="1.8"></path>
-    </svg>
-  </div>
-
-  <!-- CONTEÚDO PRINCIPAL (Na Base Bege Nude) -->
-  <main class="max-w-4xl mx-auto px-4 relative z-20 mt-3">
-
-    <!-- Navegação (Segmented Control estilo macOS) -->
-    <nav class="max-w-2xl mx-auto px-0 mb-6 relative z-20">
-      <div class="segmented-nav">
-        <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
-          <i data-lucide="calendar" class="w-4 h-4"></i> Agenda
-        </button>
-        <button onclick="mudarAba('estoque')" id="tab-estoque" class="flex items-center justify-center gap-1.5">
-          <i data-lucide="package" class="w-4 h-4"></i> Estoque
-        </button>
-        <button onclick="mudarAba('gastos')" id="tab-gastos" class="flex items-center justify-center gap-1.5">
-          <i data-lucide="receipt" class="w-4 h-4"></i> Gastos
-        </button>
-        <button onclick="mudarAba('dashboard')" id="tab-dashboard" class="flex items-center justify-center gap-1.5">
-          <i data-lucide="pie-chart" class="w-4 h-4"></i> Financeiro
-        </button>
-      </div>
-    </nav>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-4xl mx-auto px-4 relative z-20">
 
     <!-- 1. ABA AGENDA -->
     <section id="aba-agenda" class="space-y-6">
       
-      <!-- Ações Rápidas (Agendar vs Registrar Direto) -->
+      <!-- Ações Rápidas -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-amber-900 font-bold border-l-4 border-l-amber-600 shadow-sm">
           <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
@@ -385,18 +356,19 @@
         <div>
           <label class="block text-xs font-semibold text-stone-600 mb-2">Selecione os Serviços:</label>
           <div id="gridServicosForm" class="max-h-48 overflow-y-auto border rounded-xl p-3 bg-stone-50 space-y-2">
-            <!-- Injetado Dinamicamente -->
+            <!-- Injetado Dinamicamente com termo Colocação -->
           </div>
         </div>
 
+        <!-- CAMPO DE VALOR EDITÁVEL (Para parcerias / descontos) -->
         <div class="grid grid-cols-2 gap-3 bg-amber-50 p-3 rounded-xl border border-amber-200">
           <div>
             <label class="block text-xs font-semibold text-amber-900 mb-1">Duração Total (min)</label>
             <input type="number" id="agDuracao" min="15" step="5" required class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-sm font-bold text-amber-900 outline-none">
           </div>
           <div class="text-right">
-            <label class="block text-xs font-semibold text-amber-900 mb-1">Valor Total Estimado</label>
-            <div id="lblValorTotalForm" class="text-xl font-black text-amber-900 mt-1">R$ 0,00</div>
+            <label class="block text-xs font-semibold text-amber-900 mb-1">Valor Final (R$ Editável)</label>
+            <input type="number" step="0.01" id="agValorInput" required placeholder="0.00" class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-sm font-black text-amber-900 text-right outline-none focus:ring-2 focus:ring-amber-500">
           </div>
         </div>
 
@@ -447,9 +419,10 @@
           </div>
         </div>
 
+        <!-- CAMPO DE VALOR EDITÁVEL NO REGISTRO -->
         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center">
-          <span class="text-xs font-bold text-emerald-900">Total a Entrar na Receita Real:</span>
-          <span id="lblValorTotalRegForm" class="text-xl font-black text-emerald-900">R$ 0,00</span>
+          <span class="text-xs font-bold text-emerald-900">Total a Receber (Editável para Parcerias):</span>
+          <input type="number" step="0.01" id="regValorInput" required placeholder="0.00" class="w-32 bg-white border border-emerald-300 rounded-xl px-2 py-1 text-base font-black text-emerald-900 text-right outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
 
         <div class="flex justify-end gap-2 pt-2">
@@ -515,14 +488,15 @@
     }
     const db = firebase.database();
 
+    /* TABELA DE SERVIÇOS ATUALIZADA (SUBSTITUÍDO 'PRIMEIRA VEZ' POR 'COLOCAÇÃO') */
     const TABELA_SERVICOS = [
-      { id: 'alg_quadrada', cat: 'Alongamento', nome: 'Quadrada (Primeira Vez)', preco: 275, duracao: 150 },
+      { id: 'alg_quadrada', cat: 'Alongamento', nome: 'Quadrada (Colocação)', preco: 275, duracao: 150 },
       { id: 'alg_quadrada_manut', cat: 'Alongamento', nome: 'Quadrada (Manutenção)', preco: 140, duracao: 120 },
-      { id: 'alg_ballerina', cat: 'Alongamento', nome: 'Ballerina (Primeira Vez)', preco: 285, duracao: 150 },
+      { id: 'alg_ballerina', cat: 'Alongamento', nome: 'Ballerina (Colocação)', preco: 285, duracao: 150 },
       { id: 'alg_ballerina_manut', cat: 'Alongamento', nome: 'Ballerina (Manutenção)', preco: 145, duracao: 120 },
-      { id: 'alg_almond', cat: 'Alongamento', nome: 'Almond (Primeira Vez)', preco: 295, duracao: 150 },
+      { id: 'alg_almond', cat: 'Alongamento', nome: 'Almond (Colocação)', preco: 295, duracao: 150 },
       { id: 'alg_almond_manut', cat: 'Alongamento', nome: 'Almond (Manutenção)', preco: 155, duracao: 120 },
-      { id: 'alg_stiletto', cat: 'Alongamento', nome: 'Stiletto (Primeira Vez)', preco: 305, duracao: 150 },
+      { id: 'alg_stiletto', cat: 'Alongamento', nome: 'Stiletto (Colocação)', preco: 305, duracao: 150 },
       { id: 'alg_stiletto_manut', cat: 'Alongamento', nome: 'Stiletto (Manutenção)', preco: 165, duracao: 120 },
       { id: 'bnh_gel', cat: 'Banho de Gel', nome: 'Banho de Gel', preco: 140, duracao: 90 },
       { id: 'bnh_blindagem_maos', cat: 'Banho de Gel', nome: 'Blindagem Mãos', preco: 80, duracao: 60 },
@@ -660,16 +634,14 @@
         duracaoTotal += parseInt(c.getAttribute('data-duracao'));
       });
       document.getElementById('agDuracao').value = duracaoTotal || 60;
-      document.getElementById('lblValorTotalForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
-      document.getElementById('lblValorTotalForm').setAttribute('data-valor', valorTotal);
+      document.getElementById('agValorInput').value = valorTotal.toFixed(2);
     }
 
     function calcularTotaisServicosRegForm() {
       const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
       let valorTotal = 0;
       checkboxes.forEach(c => { valorTotal += parseFloat(c.getAttribute('data-preco')); });
-      document.getElementById('lblValorTotalRegForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
-      document.getElementById('lblValorTotalRegForm').setAttribute('data-valor', valorTotal);
+      document.getElementById('regValorInput').value = valorTotal.toFixed(2);
     }
 
     async function buscarContatoCliente() {
@@ -700,6 +672,8 @@
         if (item) servicosNomes.push(item.nome);
       });
 
+      const valorDigitado = parseFloat(document.getElementById('agValorInput').value || 0);
+
       const novo = {
         id: Date.now().toString(),
         cliente: document.getElementById('agNome').value,
@@ -708,7 +682,7 @@
         hora: document.getElementById('agHora').value,
         duracao: parseInt(document.getElementById('agDuracao').value),
         servicos: servicosNomes.join(' + '),
-        valor: parseFloat(document.getElementById('lblValorTotalForm').getAttribute('data-valor') || 0),
+        valor: valorDigitado,
         status: 'Pendente',
         pagamento: '',
         isRetorno: false
@@ -732,6 +706,8 @@
         if (item) servicosNomes.push(item.nome);
       });
 
+      const valorDigitado = parseFloat(document.getElementById('regValorInput').value || 0);
+
       const novo = {
         id: Date.now().toString(),
         cliente: document.getElementById('regNome').value,
@@ -740,7 +716,7 @@
         hora: '12:00',
         duracao: 60,
         servicos: servicosNomes.join(' + '),
-        valor: parseFloat(document.getElementById('lblValorTotalRegForm').getAttribute('data-valor') || 0),
+        valor: valorDigitado,
         status: 'Concluído',
         pagamento: document.getElementById('regPagamento').value,
         isRetorno: false

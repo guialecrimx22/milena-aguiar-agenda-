@@ -11,57 +11,66 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Google Fonts para Tipografia de Luxo -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-    
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #FFFFFF;
+      background: #D8C4B6;
       color: #2D2623;
+      margin: 0;
+      padding: 0;
     }
 
-    /* Fundo Dual com Transição Orgânica baseada na parede real */
-    .studio-bg {
-      background: #D8C4B6; /* Fundo base bege nude */
-      min-height: 100vh;
-      position: relative;
-    }
-
-    /* Topo Branco Orgânico simulando a parede superior */
+    /* Topo Branco Sofisticado estilo Mac */
     .wall-white-top {
       background: #FFFFFF;
-      padding-bottom: 50px;
+      padding-bottom: 25px;
       position: relative;
     }
 
-    /* Onda de LED Neon Dourada Idêntica à Foto da Parede */
+    /* Divisória de LED Natural e Fluida (Curvas Suaves) */
     .led-wave-divider {
       width: 100%;
       overflow: hidden;
       line-height: 0;
       position: relative;
-      margin-top: -15px;
+      margin-top: -10px;
     }
 
     .led-wave-divider svg {
       position: relative;
       display: block;
       width: 100%;
-      height: 65px;
+      height: 50px;
+    }
+
+    /* Tipografia de Luxo para o Logo */
+    .luxury-logo-initials {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, #C5A059 0%, #FFD700 50%, #996515 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      line-height: 1;
     }
 
     /* Vidro Efeito Apple (Glassmorphism) */
     .apple-card {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
     }
 
     .apple-card-dark {
@@ -69,13 +78,13 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
+      border-radius: 18px;
       color: #FFF;
     }
 
-    /* Segmented Control iOS Style */
+    /* Segmented Control iOS / macOS Style */
     .segmented-nav {
-      background: rgba(120, 120, 128, 0.12);
+      background: rgba(120, 120, 128, 0.15);
       padding: 4px;
       border-radius: 14px;
       display: flex;
@@ -98,46 +107,38 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04);
     }
 
-    /* Custom Checkbox Dourado */
     .custom-checkbox:checked {
       background-color: #B8860B;
       border-color: #B8860B;
     }
   </style>
 </head>
-<body class="studio-bg pb-12">
+<body class="pb-12">
 
-  <!-- TOPO BRANCO COM O LOGOTIPO IDÊNTICO À PLACA REAL -->
+  <!-- TOPO BRANCO COM LOGOTIPO DE LUXO TIPOGRÁFICO -->
   <div class="wall-white-top shadow-sm">
-    <header class="pt-8 pb-2 px-4 max-w-4xl mx-auto text-center relative z-20">
-      
-      <!-- Logotipo Fiel à Placa: Cursivo "ma", Nome e Linha com "NAIL DESIGNER" -->
-      <div class="flex flex-col items-center justify-center">
-        <svg width="240" height="95" viewBox="0 0 240 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Monograma "ma" caligráfico elegante -->
-          <path d="M45 48C55 48 62 22 76 22C85 22 81 48 95 48C105 48 110 24 121 24C128 24 133 48 152 48" stroke="url(#goldGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M68 34C75 26 91 26 99 34" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round"/>
-          
-          <!-- Texto MILLENA AGUIAR -->
-          <text x="120" y="69" font-family="'Plus Jakarta Sans', sans-serif" font-size="14.5" font-weight="700" fill="#3E2723" letter-spacing="4" text-anchor="middle">MILLENA AGUIAR</text>
-          
-          <!-- Linha divisória e tag NAIL DESIGNER -->
-          <line x1="28" y1="81" x2="112" y2="81" stroke="#3E2723" stroke-width="1.5"/>
-          <text x="162" y="83.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#3E2723" letter-spacing="1.5" text-anchor="middle">NAIL DESIGNER</text>
-          <line x1="212" y1="81" x2="212" y2="81" stroke="#3E2723" stroke-width="1.5"/>
+    <!-- Barra de Controle macOS Fictícia para dar o charme do Mac -->
+    <div class="px-4 py-2 bg-stone-100 flex items-center gap-1.5 border-b border-stone-200">
+      <div class="w-3 h-3 rounded-full bg-rose-400"></div>
+      <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+      <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+      <span class="text-[11px] text-stone-500 font-medium ml-2">Millena Aguiar Studio — Safari</span>
+    </div>
 
-          <defs>
-            <linearGradient id="goldGrad" x1="0" y1="0" x2="240" y2="95" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#C5A059"/>
-              <stop offset="0.5" stop-color="#FFD700"/>
-              <stop offset="1" stop-color="#996515"/>
-            </linearGradient>
-          </defs>
-        </svg>
+    <header class="pt-6 pb-2 px-4 max-w-4xl mx-auto text-center relative z-20">
+      <!-- Logotipo Limpo, Elegante e Nítido -->
+      <div class="flex flex-col items-center justify-center">
+        <div class="luxury-logo-initials mb-1">M A</div>
+        <h1 class="text-base font-bold tracking-[0.3em] text-stone-900 uppercase">MILLENA AGUIAR</h1>
+        <div class="flex items-center justify-center gap-2 mt-1">
+          <div class="h-[1px] w-12 bg-amber-700/60"></div>
+          <span class="text-[10px] tracking-[0.25em] font-bold text-amber-800 uppercase">NAIL DESIGNER</span>
+          <div class="h-[1px] w-12 bg-amber-700/60"></div>
+        </div>
       </div>
 
-      <!-- Sincronização / Botão de Migração do Mac -->
-      <div class="mt-2 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
+      <!-- Sincronização / Botão de Migração -->
+      <div class="mt-3 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
         <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
           <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
           <span>Nuvem Conectada</span>
@@ -149,21 +150,21 @@
     </header>
   </div>
 
-  <!-- ONDA DE LED NEON DOURADA (Transição Exata da Foto) -->
+  <!-- FITA DE LED NATURAL E ONDULADA -->
   <div class="led-wave-divider">
-    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-      <!-- Brilho Glow do LED -->
-      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45 L1200,0 L0,0 Z" fill="#FFD700" opacity="0.4" filter="blur(8px)"></path>
-      <!-- Filamento Central do LED Neon -->
-      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45" fill="none" stroke="#FFF7CC" stroke-width="4"></path>
-      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45" fill="none" stroke="#FFD700" stroke-width="2.5"></path>
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+      <!-- Glow do LED -->
+      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30 L1200,0 L0,0 Z" fill="#FFD700" opacity="0.35" filter="blur(6px)"></path>
+      <!-- Filamento Dourado Natural -->
+      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30" fill="none" stroke="#FFFFFF" stroke-width="3"></path>
+      <path d="M0,10 C200,60 400,0 600,40 C800,80 1000,10 1200,30" fill="none" stroke="#FFD700" stroke-width="1.8"></path>
     </svg>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL (Na Base Bege/Nude) -->
-  <main class="max-w-4xl mx-auto px-4 relative z-20 mt-2">
+  <!-- CONTEÚDO PRINCIPAL (Na Base Bege Nude) -->
+  <main class="max-w-4xl mx-auto px-4 relative z-20 mt-3">
 
-    <!-- Navegação Principal (Segmented Control) -->
+    <!-- Navegação (Segmented Control estilo macOS) -->
     <nav class="max-w-2xl mx-auto px-0 mb-6 relative z-20">
       <div class="segmented-nav">
         <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
@@ -186,7 +187,7 @@
       
       <!-- Ações Rápidas (Agendar vs Registrar Direto) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white/90 transition-all text-amber-900 font-bold border-l-4 border-l-amber-600 shadow-sm">
+        <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-amber-900 font-bold border-l-4 border-l-amber-600 shadow-sm">
           <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
             <i data-lucide="calendar-plus" class="w-5 h-5 text-amber-700"></i>
           </div>
@@ -196,7 +197,7 @@
           </div>
         </button>
 
-        <button onclick="abrirModalRegistroDireto()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white/90 transition-all text-emerald-950 font-bold border-l-4 border-l-emerald-600 shadow-sm">
+        <button onclick="abrirModalRegistroDireto()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-emerald-950 font-bold border-l-4 border-l-emerald-600 shadow-sm">
           <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
             <i data-lucide="zap" class="w-5 h-5 text-emerald-700"></i>
           </div>

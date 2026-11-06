@@ -1,1042 +1,1145 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Millena Aguiar | Studio Nail Designer</title>
-
-  <!-- Google Fonts & Font Awesome -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Tailwind CSS CDN -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Millena Aguiar | Studio & Management</title>
+  
+  <!-- Tailwind CSS & Lucide Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            nude: {
-              50: '#FAF6F0',
-              100: '#F5ECE1',
-              200: '#E6DCD1',
-              300: '#D9C8B4',
-              400: '#C8B39B',
-              500: '#B89F83',
-            },
-            gold: {
-              300: '#E2CA92',
-              400: '#D4B26F',
-              500: '#B38F4F',
-              600: '#8E6A2A',
-            },
-            studioText: '#2C2825',
-          },
-          fontFamily: {
-            sans: ['Montserrat', 'sans-serif'],
-          },
-          borderRadius: {
-            'apple': '20px',
-          }
-        }
-      }
-    }
-  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
   <style>
-    /* Estilos Customizados Apple Glassmorphism & Background Dividido */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+    
     body {
-      background-color: #FFFFFF;
-      color: #2C2825;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #FFFFFF;
+      color: #2D2623;
+    }
+
+    /* Fundo Dual: Topo Branco, Base Bege Nude e LED Neon Dourado */
+    .studio-bg {
+      background: linear-gradient(180deg, 
+        #FFFFFF 0%, 
+        #FFFFFF 280px, 
+        #D8C4B6 281px, 
+        #CBB5A5 100%);
       min-height: 100vh;
       position: relative;
-      overflow-x: hidden;
     }
 
-    .bg-split-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -10;
-      pointer-events: none;
-    }
-
-    .bg-bottom-wall {
+    .led-neon-gold {
       position: absolute;
-      bottom: 0;
+      top: 280px;
       left: 0;
-      width: 100%;
-      height: 62%;
-      background-color: #D9C8B4;
-      clip-path: path("M 0 60 Q 200 120, 400 50 T 800 80 T 1200 40 T 1600 90 T 2000 50 L 2000 1000 L 0 1000 Z");
+      right: 0;
+      height: 4px;
+      background: #FFD700;
+      box-shadow: 
+        0 0 10px #FFD700,
+        0 0 20px #FFD700,
+        0 0 30px #E6C200,
+        0 0 40px #B8860B;
+      z-index: 10;
     }
 
-    .led-neon-strip {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -9;
-      pointer-events: none;
-    }
-
-    .apple-glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+    /* Vidro Efeito Apple (Glassmorphism) */
+    .apple-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
-    .segmented-control {
-      background: rgba(230, 220, 209, 0.6);
-      backdrop-filter: blur(10px);
-      border-radius: 14px;
+    .apple-card-dark {
+      background: rgba(45, 38, 35, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      color: #FFF;
+    }
+
+    /* Segmented Control iOS Style */
+    .segmented-nav {
+      background: rgba(120, 120, 128, 0.12);
       padding: 4px;
+      border-radius: 14px;
+      display: flex;
+      gap: 2px;
     }
 
-    .segmented-tab {
+    .segmented-nav button {
+      flex: 1;
+      padding: 8px 16px;
       border-radius: 10px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 13px;
       font-weight: 600;
-      font-size: 0.82rem;
+      transition: all 0.25s ease;
+      color: #6E6E73;
     }
 
-    .segmented-tab.active {
+    .segmented-nav button.active {
       background: #FFFFFF;
-      color: #B38F4F;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      color: #1D1D1F;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04);
     }
 
-    /* Ocultar scrollbars mas manter funcional */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    /* Custom Checkbox Dourado */
+    .custom-checkbox:checked {
+      background-color: #B8860B;
+      border-color: #B8860B;
     }
   </style>
 </head>
-<body class="pb-12 text-studioText min-h-full flex flex-col">
+<body class="studio-bg pb-12">
 
-  <!-- DUO BACKGROUND COM LED NEON RESPLANDECENTE -->
-  <div class="bg-split-container">
-    <div class="bg-bottom-wall"></div>
-    <svg class="led-neon-strip" viewBox="0 0 2000 1000" preserveAspectRatio="none">
-      <path d="M 0 60 Q 200 120, 400 50 T 800 80 T 1200 40 T 1600 90 T 2000 50" 
-            fill="none" stroke="#FFE082" stroke-width="8" filter="drop-shadow(0px 0px 14px #FFB300)" />
-      <path d="M 0 60 Q 200 120, 400 50 T 800 80 T 1200 40 T 1600 90 T 2000 50" 
-            fill="none" stroke="#FFFFFF" stroke-width="3" />
-    </svg>
-  </div>
+  <div class="led-neon-gold"></div>
 
-  <!-- CABEÇALHO / LOGO VETORIAL FLUIDO MA -->
-  <header class="pt-8 pb-4 px-4 text-center">
-    <div class="max-w-md mx-auto flex flex-col items-center">
-      <svg class="w-full max-w-[340px] h-auto drop-shadow-sm" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cabeçalho Principal (Topo Branco) -->
+  <header class="pt-8 pb-6 px-4 max-w-4xl mx-auto text-center relative z-20">
+    <!-- Logotipo MA Cursivo SVG em Ouro -->
+    <div class="flex justify-center mb-2">
+      <svg width="90" height="45" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 35C20 35 25 15 35 15C42 15 40 35 48 35C55 35 58 20 65 20C70 20 72 35 85 35" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M25 25C30 20 40 20 45 25" stroke="url(#goldGradient)" stroke-width="2" stroke-linecap="round"/>
         <defs>
-          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#997535" />
-            <stop offset="50%" stop-color="#D4B26F" />
-            <stop offset="100%" stop-color="#8E6A2A" />
+          <linearGradient id="goldGradient" x1="0" y1="0" x2="100" y2="50" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#D4AF37"/>
+            <stop offset="0.5" stop-color="#FFD700"/>
+            <stop offset="1" stop-color="#AA771C"/>
           </linearGradient>
         </defs>
-        <!-- Flourish Esquerda + M e A Cursivos Fluídos + Flourish Direita -->
-        <path d="M 20,45 C 50,85 100,75 140,52 C 150,48 158,58 162,75 C 165,88 172,92 178,72 C 185,50 195,48 202,70 C 206,82 212,88 218,68 C 228,38 245,45 238,72 C 235,85 242,90 252,75 C 265,55 285,48 295,65 C 302,77 292,92 280,88 C 270,85 272,70 285,62 C 298,54 315,50 340,55 C 380,62 430,25 480,35" 
-              stroke="url(#goldGrad)" stroke-width="4.8" stroke-linecap="round" fill="none" />
       </svg>
-      
-      <h1 class="text-xl md:text-2xl font-medium tracking-[0.3em] uppercase text-studioText -mt-2">MILLENA AGUIAR</h1>
-      <div class="flex items-center w-full max-w-[280px] mt-1.5">
-        <div class="flex-1 h-[1px] bg-gold-500"></div>
-        <span class="text-[10px] md:text-xs font-semibold tracking-[0.25em] text-gold-500 px-3 whitespace-nowrap">NAIL DESIGNER</span>
-        <div class="flex-1 h-[1px] bg-gold-500"></div>
-      </div>
+    </div>
+    
+    <h1 class="text-xl font-bold tracking-wider text-amber-900 uppercase">Millena Aguiar</h1>
+    <p class="text-xs tracking-widest text-amber-800/70 font-medium">STUDIO & NAIL DESIGNER</p>
+
+    <!-- Barra de Status Sincronização / Login -->
+    <div class="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/80">
+      <span id="syncStatus" class="inline-flex items-center gap-1 bg-amber-100/80 border border-amber-300 px-3 py-1 rounded-full">
+        <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
+        <span>Sincronizado na Nuvem</span>
+      </span>
+      <button onclick="importarDadosLocais()" id="btnImportar" class="hidden bg-amber-800 text-white px-3 py-1 rounded-full text-xs hover:bg-amber-900 shadow">
+        📥 Migrar Dados do Mac
+      </button>
     </div>
   </header>
 
-  <!-- NAVEGAÇÃO SEGMENTED CONTROL ESTILO APPLE -->
-  <nav class="max-w-5xl mx-auto px-4 mb-6">
-    <div class="segmented-control flex overflow-x-auto no-scrollbar gap-1 p-1">
-      <button onclick="trocarAba('agenda')" id="tab-agenda" class="segmented-tab active flex-1 py-2.5 px-3 text-center whitespace-nowrap flex items-center justify-center gap-2">
-        <i class="fa-regular fa-calendar-check text-xs"></i> Agenda
+  <!-- Navegação Principal (Segmented Control - Estilo iOS) -->
+  <nav class="max-w-2xl mx-auto px-4 mb-6 relative z-20">
+    <div class="segmented-nav">
+      <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
+        <i data-lucide="calendar" class="w-4 h-4"></i> Agenda
       </button>
-      <button onclick="trocarAba('estoque')" id="tab-estoque" class="segmented-tab flex-1 py-2.5 px-3 text-center whitespace-nowrap flex items-center justify-center gap-2 text-studioText/70">
-        <i class="fa-solid fa-boxes-stacked text-xs"></i> Estoque
+      <button onclick="mudarAba('estoque')" id="tab-estoque" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="package" class="w-4 h-4"></i> Estoque
       </button>
-      <button onclick="trocarAba('gastos')" id="tab-gastos" class="segmented-tab flex-1 py-2.5 px-3 text-center whitespace-nowrap flex items-center justify-center gap-2 text-studioText/70">
-        <i class="fa-solid fa-receipt text-xs"></i> Gastos
+      <button onclick="mudarAba('gastos')" id="tab-gastos" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="receipt" class="w-4 h-4"></i> Gastos
       </button>
-      <button onclick="trocarAba('dashboard')" id="tab-dashboard" class="segmented-tab flex-1 py-2.5 px-3 text-center whitespace-nowrap flex items-center justify-center gap-2 text-studioText/70">
-        <i class="fa-solid fa-chart-pie text-xs"></i> Financeiro
+      <button onclick="mudarAba('dashboard')" id="tab-dashboard" class="flex items-center justify-center gap-1.5">
+        <i data-lucide="pie-chart" class="w-4 h-4"></i> Financeiro
       </button>
     </div>
   </nav>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-5xl mx-auto px-4 flex-1 w-full">
+  <!-- CONTEÚDO PRINCIPAL (Na Base Bege/Nude) -->
+  <main class="max-w-4xl mx-auto px-4 relative z-20">
 
-    <!-- ABA 1: AGENDA & AGENDAMENTOS -->
-    <section id="conteudo-agenda" class="space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        <!-- LADO ESQUERDO: NOVO AGENDAMENTO (5 COLUNAS) -->
-        <div class="lg:col-span-5 apple-glass-card p-5">
-          <h2 class="text-base font-bold text-studioText mb-4 pb-2 border-b border-nude-200 flex items-center justify-between">
-            <span>Novo Agendamento</span>
-            <i class="fa-solid fa-plus text-gold-500 text-sm"></i>
-          </h2>
-
-          <form id="formAgendamento" onsubmit="salvarAgendamento(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-studioText/70 mb-1">Nome da Cliente</label>
-              <input type="text" id="nomeCliente" placeholder="Ex: Camila Rocha" required
-                     class="w-full px-3.5 py-2.5 rounded-xl border border-nude-200 bg-white text-sm focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-300/40 transition">
-            </div>
-
-            <!-- SELEÇÃO MÚLTIPLA DE SERVIÇOS -->
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="text-xs font-semibold text-studioText/70">Selecione os Serviços</label>
-                <span class="text-[10px] text-gold-600 font-medium">Múltipla escolha</span>
-              </div>
-
-              <!-- Tabela de Serviços Accordion / Scroll -->
-              <div id="listaServicosCheckout" class="max-h-56 overflow-y-auto rounded-xl border border-nude-200 bg-white p-2.5 space-y-3 no-scrollbar text-xs">
-                <!-- Procedimentos Renderizados via JS -->
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Data</label>
-                <input type="date" id="dataAgendamento" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-medium focus:outline-none focus:border-gold-500">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Horário</label>
-                <input type="time" id="horaAgendamento" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-medium focus:outline-none focus:border-gold-500">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Duração (minutos)</label>
-                <input type="number" id="duracaoMinutos" min="15" step="15" value="0" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-bold text-studioText focus:outline-none focus:border-gold-500">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Valor Previsto (R$)</label>
-                <input type="number" id="valorTotalAuto" step="0.01" value="0.00" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-nude-50 text-xs font-bold text-gold-600 focus:outline-none">
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-3 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 hover:to-gold-600 text-white font-bold text-xs rounded-xl shadow-md shadow-gold-500/20 active:scale-[0.99] transition">
-              Confirmar Agendamento
-            </button>
-          </form>
-        </div>
-
-        <!-- LADO DIREITO: GRADE DA AGENDA DO DIA (7 COLUNAS) -->
-        <div class="lg:col-span-7 space-y-4">
-          <div class="apple-glass-card p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-2 border-b border-nude-200">
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-calendar-day text-gold-500"></i>
-                <h3 class="text-base font-bold text-studioText">Agenda do Dia</h3>
-              </div>
-              <input type="date" id="filtroDataAgenda" onchange="renderizarAgenda()" 
-                     class="px-3 py-1.5 rounded-xl border border-nude-200 bg-white text-xs font-semibold focus:outline-none focus:border-gold-500">
-            </div>
-
-            <!-- LISTA DE HORÁRIOS BLOQUEADOS E CLIENTES -->
-            <div id="containerGradeAgenda" class="space-y-3 min-h-[220px]">
-              <!-- JS Injeta os itens -->
-            </div>
+    <!-- 1. ABA AGENDA -->
+    <section id="aba-agenda" class="space-y-6">
+      
+      <!-- Ações Rápidas do Topo (Dois Botões) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button onclick="abrirModalAgendamento()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-amber-900 font-bold border-l-4 border-l-amber-500 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+            <i data-lucide="calendar-plus" class="w-5 h-5 text-amber-700"></i>
           </div>
-        </div>
+          <div class="text-left">
+            <div class="text-sm">📅 Novo Agendamento</div>
+            <div class="text-xs font-normal text-stone-500">Para datas futuras (Pendente)</div>
+          </div>
+        </button>
 
+        <button onclick="abrirModalRegistroDireto()" class="apple-card p-4 flex items-center justify-center gap-3 hover:bg-white transition-all text-emerald-950 font-bold border-l-4 border-l-emerald-500 shadow-sm">
+          <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+            <i data-lucide="zap" class="w-5 h-5 text-emerald-700"></i>
+          </div>
+          <div class="text-left">
+            <div class="text-sm">⚡ Registrar Atendimento</div>
+            <div class="text-xs font-normal text-stone-500">Lançar serviço já feito (Entrada Direta)</div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Filtro de Data -->
+      <div class="apple-card p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="calendar-days" class="w-5 h-5 text-amber-800"></i>
+          <span class="font-bold text-stone-800">Atendimentos de:</span>
+        </div>
+        <input type="date" id="filtroDataAgenda" onchange="renderizarAgenda()" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
+      </div>
+
+      <!-- Resumo do Dia (Cards Pequenos) -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="apple-card p-3 text-center">
+          <p class="text-xs text-stone-500 font-medium">Agendados</p>
+          <p id="statQtdAgendados" class="text-lg font-bold text-stone-800">0</p>
+        </div>
+        <div class="apple-card p-3 text-center">
+          <p class="text-xs text-stone-500 font-medium">Concluídos</p>
+          <p id="statQtdConcluidos" class="text-lg font-bold text-emerald-700">0</p>
+        </div>
+        <div class="apple-card p-3 text-center">
+          <p class="text-xs text-stone-500 font-medium">A Receber (Previsto)</p>
+          <p id="statValorPendente" class="text-lg font-bold text-amber-700">R$ 0</p>
+        </div>
+        <div class="apple-card p-3 text-center bg-emerald-50/80 border-emerald-200">
+          <p class="text-xs text-emerald-800 font-medium">Faturamento Confirmado</p>
+          <p id="statValorConcluido" class="text-lg font-bold text-emerald-800">R$ 0</p>
+        </div>
+      </div>
+
+      <!-- Lista da Agenda do Dia -->
+      <div class="apple-card p-5">
+        <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center justify-between">
+          <span>Horários Marcados</span>
+          <span id="badgeDataAgenda" class="text-xs bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-semibold">Hoje</span>
+        </h2>
+        <div id="listaAgendamentos" class="space-y-3">
+          <!-- Injetado Dinamicamente -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. ABA ESTOQUE -->
+    <section id="aba-estoque" class="space-y-6 hidden">
+      <!-- Novo Material -->
+      <div class="apple-card p-5">
+        <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5 text-amber-800"></i> Cadastrar Insumo / Material
+        </h2>
+        <form onsubmit="salvarNovoMaterial(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <input type="text" id="matNome" placeholder="Nome (Ex: Gel UV, Lixa 100/180)" required class="sm:col-span-1 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" id="matQtd" placeholder="Qtd Inicial" min="0" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" id="matMin" placeholder="Qtd Mínima (Alerta)" min="1" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <button type="submit" class="sm:col-span-3 bg-stone-900 text-white font-semibold py-2.5 rounded-xl hover:bg-black transition-all text-sm">
+            Adicionar ao Estoque
+          </button>
+        </form>
+      </div>
+
+      <!-- Lista de Estoque -->
+      <div class="apple-card p-5">
+        <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center justify-between">
+          <span>Materiais Cadastrados</span>
+          <span class="text-xs text-stone-500 font-normal">Ajuste rápido (+ / -) ou Exclua</span>
+        </h2>
+        <div id="listaEstoque" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Injetado Dinamicamente -->
+        </div>
       </div>
     </section>
 
-    <!-- ABA 2: ESTOQUE DE MATERIAIS -->
-    <section id="conteudo-estoque" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- 3. ABA GASTOS -->
+    <section id="aba-gastos" class="space-y-6 hidden">
+      <!-- Formulário de Novo Gasto -->
+      <div class="apple-card p-5">
+        <h2 class="text-base font-bold text-stone-800 mb-4 flex items-center gap-2">
+          <i data-lucide="minus-circle" class="w-5 h-5 text-rose-700"></i> Registrar Gasto / Despesa do Studio
+        </h2>
+        <form onsubmit="salvarGasto(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <input type="text" id="gastoDesc" placeholder="Descrição (Ex: Conta de Luz, Gel Novo)" required class="sm:col-span-2 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <input type="number" step="0.01" id="gastoValor" placeholder="Valor (R$)" required class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <select id="gastoCategoria" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <option value="Insumos/Materiais">Insumos / Materiais</option>
+            <option value="Fixo/Estrutura">Fixo / Estrutura (Aluguel, Luz, Net)</option>
+            <option value="Marketing/Outros">Marketing / Outros</option>
+          </select>
+          <input type="date" id="gastoData" required class="sm:col-span-2 bg-white/80 border border-stone-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          <button type="submit" class="sm:col-span-2 bg-rose-800 text-white font-semibold py-2.5 rounded-xl hover:bg-rose-900 transition-all text-sm">
+            Lançar Despesa
+          </button>
+        </form>
+      </div>
 
-        <!-- CADASTRAR NOVO MATERIAL (4 COLUNAS) -->
-        <div class="lg:col-span-4 apple-glass-card p-5">
-          <h2 class="text-base font-bold text-studioText mb-4 pb-2 border-b border-nude-200 flex items-center justify-between">
-            <span>Novo Material</span>
-            <i class="fa-solid fa-box-open text-gold-500 text-sm"></i>
-          </h2>
-
-          <form id="formEstoque" onsubmit="cadastrarMaterial(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-studioText/70 mb-1">Nome do Item / Material</label>
-              <input type="text" id="nomeMaterial" placeholder="Ex: Gel UV Vòlia Clear" required
-                     class="w-full px-3.5 py-2.5 rounded-xl border border-nude-200 bg-white text-sm focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Qtd Atual</label>
-                <input type="number" id="qtdMaterial" min="0" value="1" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-bold focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Qtd Mínima (Alerta)</label>
-                <input type="number" id="minMaterial" min="0" value="2" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-bold focus:outline-none">
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-3 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 text-white font-bold text-xs rounded-xl shadow-md active:scale-[0.99] transition">
-              Cadastrar no Estoque
-            </button>
-          </form>
+      <!-- Lista de Gastos -->
+      <div class="apple-card p-5">
+        <h2 class="text-base font-bold text-stone-800 mb-4">Histórico de Gastos</h2>
+        <div id="listaGastos" class="space-y-3">
+          <!-- Injetado Dinamicamente -->
         </div>
-
-        <!-- PAINEL DE MATERIAIS CADASTRADOS (8 COLUNAS) -->
-        <div class="lg:col-span-8 apple-glass-card p-5">
-          <h3 class="text-base font-bold text-studioText mb-4 pb-2 border-b border-nude-200">
-            Controle de Insumos
-          </h3>
-
-          <div id="gridEstoque" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <!-- JS Injeta os Materiais -->
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- ABA 3: GASTOS E DESPESAS DO ESTÚDIO -->
-    <section id="conteudo-gastos" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        <!-- CADASTRAR NOVO GASTO (4 COLUNAS) -->
-        <div class="lg:col-span-4 apple-glass-card p-5">
-          <h2 class="text-base font-bold text-studioText mb-4 pb-2 border-b border-nude-200 flex items-center justify-between">
-            <span>Registrar Despesa</span>
-            <i class="fa-solid fa-file-invoice-dollar text-gold-500 text-sm"></i>
-          </h2>
-
-          <form id="formGastos" onsubmit="cadastrarGasto(event)" class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-studioText/70 mb-1">Descrição do Gasto</label>
-              <input type="text" id="descGasto" placeholder="Ex: Aluguel do Estúdio / Lixas" required
-                     class="w-full px-3.5 py-2.5 rounded-xl border border-nude-200 bg-white text-sm focus:outline-none focus:border-gold-500">
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-studioText/70 mb-1">Categoria</label>
-              <select id="catGasto" class="w-full px-3.5 py-2.5 rounded-xl border border-nude-200 bg-white text-xs font-semibold focus:outline-none">
-                <option value="Fixo/Estrutura">Fixo / Estrutura (Aluguel, Luz, Net)</option>
-                <option value="Insumos/Materiais">Insumos & Materiais</option>
-                <option value="Marketing/Outros">Marketing & Outros</option>
-              </select>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Valor (R$)</label>
-                <input type="number" id="valorGasto" step="0.01" placeholder="0,00" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-bold focus:outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-studioText/70 mb-1">Data</label>
-                <input type="date" id="dataGasto" required
-                       class="w-full px-3 py-2 rounded-xl border border-nude-200 bg-white text-xs font-medium focus:outline-none">
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-3 bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-500 text-white font-bold text-xs rounded-xl shadow-md active:scale-[0.99] transition">
-              Lançar Despesa
-            </button>
-          </form>
-        </div>
-
-        <!-- LISTA DE GASTOS LANÇADOS (8 COLUNAS) -->
-        <div class="lg:col-span-8 apple-glass-card p-5">
-          <h3 class="text-base font-bold text-studioText mb-4 pb-2 border-b border-nude-200">
-            Histórico de Custos e Despesas
-          </h3>
-
-          <div id="listaGastos" class="space-y-2.5">
-            <!-- JS Injeta os Gastos -->
-          </div>
-        </div>
-
+    <!-- 4. ABA DASHBOARD FINANCEIRO -->
+    <section id="aba-dashboard" class="space-y-6 hidden">
+      <!-- Seletor de Mês/Ano -->
+      <div class="apple-card p-4 flex items-center justify-between">
+        <span class="font-bold text-stone-800">Período de Análise:</span>
+        <input type="month" id="filtroMesDash" onchange="renderizarDashboard()" class="bg-white/80 border border-stone-300 rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500">
       </div>
-    </section>
 
-    <!-- ABA 4: DASHBOARD FINANCEIRO E GRÁFICOS -->
-    <section id="conteudo-dashboard" class="hidden space-y-6">
-
-      <!-- MÉTRICAS RESUMO -->
+      <!-- Cards de Resultado (Entradas, Saídas e Lucro) -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="apple-glass-card p-4 border-l-4 border-l-emerald-500">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-studioText/60">Faturamento Real</span>
-          <div id="dashFaturamento" class="text-xl font-extrabold text-emerald-600 mt-1">R$ 0,00</div>
-          <span class="text-[10px] text-studioText/50">Apenas Serviços Concluídos</span>
+        <div class="apple-card p-4 border-l-4 border-l-emerald-500">
+          <p class="text-xs text-stone-500 font-medium">Receita Concluída (Entradas)</p>
+          <p id="dashReceita" class="text-xl font-extrabold text-emerald-700">R$ 0,00</p>
         </div>
-
-        <div class="apple-glass-card p-4 border-l-4 border-l-rose-500">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-studioText/60">Gastos & Despesas</span>
-          <div id="dashGastos" class="text-xl font-extrabold text-rose-600 mt-1">R$ 0,00</div>
-          <span class="text-[10px] text-studioText/50">Custos Registrados</span>
+        <div class="apple-card p-4 border-l-4 border-l-rose-500">
+          <p class="text-xs text-stone-500 font-medium">Despesas Totais (Saídas)</p>
+          <p id="dashGastos" class="text-xl font-extrabold text-rose-700">R$ 0,00</p>
         </div>
-
-        <div class="apple-glass-card p-4 border-l-4 border-l-gold-500">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-studioText/60">Lucro Líquido Real</span>
-          <div id="dashLucro" class="text-xl font-extrabold text-gold-600 mt-1">R$ 0,00</div>
-          <span class="text-[10px] text-studioText/50">Receita Real Menos Custos</span>
+        <div class="apple-card-dark p-4 border-l-4 border-l-amber-400">
+          <p class="text-xs text-amber-200/80 font-medium">Lucro Líquido Real</p>
+          <p id="dashLucro" class="text-2xl font-black text-amber-400">R$ 0,00</p>
         </div>
       </div>
 
-      <!-- PAINEL DE GRÁFICOS CANVAS -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- GRÁFICO COMPARATIVO ENTRADAS VS SAÍDAS -->
-        <div class="lg:col-span-7 apple-glass-card p-5 flex flex-col justify-between">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-studioText/70 mb-3 pb-2 border-b border-nude-200">
-            Balanço Mensal: Receitas Reais vs Gastos
-          </h3>
-          <div class="w-full h-56 flex items-center justify-center">
-            <canvas id="chartReceitaGastos"></canvas>
-          </div>
+      <!-- Gráfico Comparativo Dinâmico -->
+      <div class="apple-card p-5">
+        <h3 class="text-sm font-bold text-stone-800 mb-4">Balanço do Mês (Entradas vs Saídas)</h3>
+        <div class="relative h-64">
+          <canvas id="chartFinanceiro"></canvas>
         </div>
-
-        <!-- DISTRIBUIÇÃO POR MEIO DE PAGAMENTO -->
-        <div class="lg:col-span-5 apple-glass-card p-5 flex flex-col justify-between">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-studioText/70 mb-3 pb-2 border-b border-nude-200">
-            Receita por Forma de Pagamento
-          </h3>
-          <div id="listaFormasPagamentoDash" class="space-y-3 my-auto">
-            <!-- JS Injeta distribuição de Pix, Crédito, Débito e Dinheiro -->
-          </div>
-        </div>
-
       </div>
 
+      <!-- Distribuição por Meio de Pagamento -->
+      <div class="apple-card p-5">
+        <h3 class="text-sm font-bold text-stone-800 mb-3">Receita por Forma de Pagamento</h3>
+        <div id="listaFormasPagamento" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <!-- Injetado Dinamicamente -->
+        </div>
+      </div>
     </section>
 
   </main>
 
-  <!-- MODAL DE CONCLUSÃO DE ATENDIMENTO E SUGESTÃO DE RETORNO (15 DIAS) -->
-  <div id="modalConclusao" class="fixed inset-0 bg-studioText/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="apple-glass-card max-w-md w-full p-6 shadow-2xl relative border border-white">
-      <button onclick="fecharModalConclusao()" class="absolute top-4 right-4 text-studioText/50 hover:text-studioText font-bold text-sm">✕</button>
-
-      <div class="text-center mb-4">
-        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 text-xl font-bold">✓</div>
-        <h3 class="text-lg font-bold text-studioText">Concluir Atendimento</h3>
-        <p id="subtituloClienteModal" class="text-xs text-studioText/60 mt-0.5"></p>
+  <!-- MODAL 1: NOVO AGENDAMENTO (FUTURO - PENDENTE) -->
+  <div id="modalAgendamento" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 border-b pb-3">
+        <h3 class="font-bold text-stone-800 text-lg flex items-center gap-2">
+          <i data-lucide="calendar" class="text-amber-800"></i> Novo Agendamento (Pendente)
+        </h3>
+        <button onclick="fecharModalAgendamento()" class="text-stone-400 hover:text-stone-600"><i data-lucide="x"></i></button>
       </div>
 
-      <div class="space-y-4">
-        <!-- SELEÇÃO DA FORMA DE PAGAMENTO -->
+      <form onsubmit="salvarAgendamento(event)" class="space-y-4">
+        <!-- Busca de Contatos Integrada (Chrome/Mac/iOS) -->
         <div>
-          <label class="block text-xs font-semibold text-studioText/70 mb-1">Forma de Pagamento Exigida</label>
-          <select id="pagamentoConclusao" class="w-full px-3.5 py-2.5 rounded-xl border border-nude-200 bg-white text-xs font-bold text-studioText focus:outline-none focus:border-gold-500">
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Nome da Cliente</label>
+          <div class="flex gap-2">
+            <input type="text" id="agNome" placeholder="Digite o nome da cliente" required class="flex-1 bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+            <button type="button" onclick="buscarContatoCliente()" title="Buscar nos Contatos / Clientes Salvas" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1">
+              <i data-lucide="contact" class="w-4 h-4"></i> Contatos
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-1">WhatsApp (Com DDD)</label>
+          <input type="tel" id="agTelefone" placeholder="11980678236" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Data</label>
+            <input type="date" id="agData" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Horário de Inicio</label>
+            <input type="time" id="agHora" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+        </div>
+
+        <!-- Tabela de Serviços (Múltipla Seleção) -->
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-2">Selecione os Serviços:</label>
+          <div id="gridServicosForm" class="max-h-48 overflow-y-auto border rounded-xl p-3 bg-stone-50 space-y-2">
+            <!-- Injetado Dinamicamente -->
+          </div>
+        </div>
+
+        <!-- Duração Editável e Valor Total -->
+        <div class="grid grid-cols-2 gap-3 bg-amber-50 p-3 rounded-xl border border-amber-200">
+          <div>
+            <label class="block text-xs font-semibold text-amber-900 mb-1">Duração Total (min)</label>
+            <input type="number" id="agDuracao" min="15" step="5" onchange="atualizarResumoValoresForm()" required class="w-full bg-white border border-amber-300 rounded-xl px-3 py-1.5 text-sm font-bold text-amber-900 outline-none">
+          </div>
+          <div class="text-right">
+            <label class="block text-xs font-semibold text-amber-900 mb-1">Valor Total Estimado</label>
+            <div id="lblValorTotalForm" class="text-xl font-black text-amber-900 mt-1">R$ 0,00</div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="fecharModalAgendamento()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-100">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-amber-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all">Salvar Agendamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: REGISTRO DIRETO DE ATENDIMENTO CONCLUÍDO -->
+  <div id="modalRegistroDireto" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto border-t-4 border-t-emerald-500">
+      <div class="flex items-center justify-between mb-4 border-b pb-3">
+        <h3 class="font-bold text-emerald-950 text-lg flex items-center gap-2">
+          <i data-lucide="zap" class="text-emerald-600"></i> Registrar Atendimento Já Realizado
+        </h3>
+        <button onclick="fecharModalRegistroDireto()" class="text-stone-400 hover:text-stone-600"><i data-lucide="x"></i></button>
+      </div>
+
+      <form onsubmit="salvarRegistroDireto(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Nome da Cliente</label>
+          <input type="text" id="regNome" placeholder="Nome da cliente" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Data do Atendimento</label>
+            <input type="date" id="regData" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Forma de Pagamento</label>
+            <select id="regPagamento" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+              <option value="Pix">Pix</option>
+              <option value="Cartão de Crédito">Cartão de Crédito</option>
+              <option value="Cartão de Débito">Cartão de Débito</option>
+              <option value="Dinheiro">Dinheiro</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela de Serviços -->
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-2">Serviços Realizados:</label>
+          <div id="gridServicosRegForm" class="max-h-44 overflow-y-auto border rounded-xl p-3 bg-stone-50 space-y-2">
+            <!-- Injetado Dinamicamente -->
+          </div>
+        </div>
+
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center">
+          <span class="text-xs font-bold text-emerald-900">Total a Entrar na Receita Real:</span>
+          <span id="lblValorTotalRegForm" class="text-xl font-black text-emerald-900">R$ 0,00</span>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="fecharModalRegistroDireto()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-stone-600 hover:bg-stone-100">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-emerald-700 text-white rounded-xl text-xs font-bold hover:bg-emerald-900 transition-all">Lançar no Faturamento Real</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: CONCLUIR ATENDIMENTO (AGENDAMENTO FUTURO -> CONCLUÍDO) -->
+  <div id="modalConcluir" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="apple-card w-full max-w-md p-6">
+      <h3 class="font-bold text-stone-800 text-lg mb-2 flex items-center gap-2">
+        <i data-lucide="check-circle-2" class="text-emerald-600"></i> Finalizar Procedimento
+      </h3>
+      <p id="descClienteConcluir" class="text-xs text-stone-600 mb-4"></p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Qual foi a Forma de Pagamento?</label>
+          <select id="concluirPagamento" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
             <option value="Pix">Pix</option>
-            <option value="Crédito">Cartão de Crédito</option>
-            <option value="Débito">Cartão de Débito</option>
+            <option value="Cartão de Crédito">Cartão de Crédito</option>
+            <option value="Cartão de Débito">Cartão de Débito</option>
             <option value="Dinheiro">Dinheiro</option>
           </select>
         </div>
 
-        <!-- DIVISOR DE RETORNO -->
-        <div class="pt-3 border-t border-nude-200">
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-gold-600 flex items-center gap-1.5">
-              <i class="fa-solid fa-clock-rotate-left"></i> Sugerir Retorno (15 Dias)
-            </span>
-            <input type="checkbox" id="checkAgendarRetorno" checked onchange="toggleOpcoesRetorno()" class="accent-gold-500 w-4 h-4 cursor-pointer">
-          </div>
-
-          <div id="boxOpcoesRetorno" class="space-y-3 bg-nude-50/80 p-3 rounded-xl border border-nude-200 text-xs">
+        <!-- Sugestão de Retorno em 15 Dias -->
+        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200 space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold text-amber-900">
+            <input type="checkbox" id="chkAgendarRetorno" checked onchange="toggleFormRetorno()" class="custom-checkbox w-4 h-4 rounded">
+            <span>Sugestão: Marcar Retorno para daqui 15 Dias?</span>
+          </label>
+          <div id="formRetorno15Dias" class="grid grid-cols-2 gap-2 pt-2">
             <div>
-              <label class="block text-[11px] font-semibold text-studioText/70 mb-1">Data Sugerida para Retorno</label>
-              <input type="date" id="dataRetornoSugerida" class="w-full px-3 py-1.5 rounded-lg border border-nude-200 bg-white font-medium">
+              <label class="block text-[10px] font-medium text-amber-800">Data Sugerida</label>
+              <input type="date" id="retornoData" class="w-full bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs">
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-studioText/70 mb-1">Horário do Retorno</label>
-              <input type="time" id="horaRetornoSugerida" class="w-full px-3 py-1.5 rounded-lg border border-nude-200 bg-white font-medium">
+              <label class="block text-[10px] font-medium text-amber-800">Horário</label>
+              <input type="time" id="retornoHora" class="w-full bg-white border border-amber-300 rounded-lg px-2 py-1 text-xs">
             </div>
           </div>
         </div>
 
-        <button onclick="confirmarConclusaoEAgendarRetorno()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 text-white font-bold text-xs rounded-xl shadow-md active:scale-[0.99] transition">
-          Finalizar Atendimento & Salvar
-        </button>
+        <div class="flex justify-end gap-2 pt-2">
+          <button onclick="fecharModalConcluir()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-stone-600">Cancelar</button>
+          <button onclick="confirmarConclusaoAtendimento()" class="px-5 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700">Confirmar e Receber</button>
+        </div>
       </div>
     </div>
   </div>
 
-
-  <!-- SCRIPTS & LÓGICA DO SISTEMA -->
+  <!-- SCRIPT COMPLETO DAS REGRAS E BANCO DE DADOS -->
   <script>
-    // BASE DE DADOS OFICIAL DE SERVIÇOS
-    const SERVICOS_OFICIAIS = [
-      { id: 's1', cat: 'Alongamento', nome: 'Quadrada - Alongamento', preco: 275.00, tempo: 150 },
-      { id: 's2', cat: 'Alongamento', nome: 'Quadrada - Manutenção', preco: 140.00, tempo: 120 },
-      { id: 's3', cat: 'Alongamento', nome: 'Ballerina - Alongamento', preco: 285.00, tempo: 150 },
-      { id: 's4', cat: 'Alongamento', nome: 'Ballerina - Manutenção', preco: 145.00, tempo: 120 },
-      { id: 's5', cat: 'Alongamento', nome: 'Almond - Alongamento', preco: 295.00, tempo: 150 },
-      { id: 's6', cat: 'Alongamento', nome: 'Almond - Manutenção', preco: 155.00, tempo: 120 },
-      { id: 's7', cat: 'Alongamento', nome: 'Stiletto - Alongamento', preco: 305.00, tempo: 150 },
-      { id: 's8', cat: 'Alongamento', nome: 'Stiletto - Manutenção', preco: 165.00, tempo: 120 },
+    // 1. CONFIGURAÇÃO DO FIREBASE (Nuvem em Tempo Real)
+    const firebaseConfig = {
+      databaseURL: "https://studio-millena-aguiar-default-rtdb.firebaseio.com"
+    };
 
-      { id: 's9', cat: 'Banho de Gel', nome: 'Banho de Gel', preco: 140.00, tempo: 90 },
-      { id: 's10', cat: 'Banho de Gel', nome: 'Blindagem Mãos', preco: 80.00, tempo: 60 },
-      { id: 's11', cat: 'Banho de Gel', nome: 'Blindagem Pés', preco: 75.00, tempo: 60 },
+    // Inicializa Firebase se não foi inicializado antes
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
 
-      { id: 's12', cat: 'Manicure & Pedicure', nome: 'Manicure Simples', preco: 35.00, tempo: 45 },
-      { id: 's13', cat: 'Manicure & Pedicure', nome: 'Manicure Decorada', preco: 40.00, tempo: 60 },
-      { id: 's14', cat: 'Manicure & Pedicure', nome: 'Pedicure Simples', preco: 45.00, tempo: 45 },
-      { id: 's15', cat: 'Manicure & Pedicure', nome: 'Pedicure Decorada', preco: 50.00, tempo: 60 },
-      { id: 's16', cat: 'Manicure & Pedicure', nome: 'Spa dos Pés', preco: 85.00, tempo: 60 },
+    // 2. TABELA OFICIAL DE SERVIÇOS (MILLENA AGUIAR)
+    const TABELA_SERVICOS = [
+      // ALONGAMENTO
+      { id: 'alg_quadrada', cat: 'Alongamento', nome: 'Quadrada (Primeira Vez)', preco: 275, duracao: 150 },
+      { id: 'alg_quadrada_manut', cat: 'Alongamento', nome: 'Quadrada (Manutenção)', preco: 140, duracao: 120 },
+      { id: 'alg_ballerina', cat: 'Alongamento', nome: 'Ballerina (Primeira Vez)', preco: 285, duracao: 150 },
+      { id: 'alg_ballerina_manut', cat: 'Alongamento', nome: 'Ballerina (Manutenção)', preco: 145, duracao: 120 },
+      { id: 'alg_almond', cat: 'Alongamento', nome: 'Almond (Primeira Vez)', preco: 295, duracao: 150 },
+      { id: 'alg_almond_manut', cat: 'Alongamento', nome: 'Almond (Manutenção)', preco: 155, duracao: 120 },
+      { id: 'alg_stiletto', cat: 'Alongamento', nome: 'Stiletto (Primeira Vez)', preco: 305, duracao: 150 },
+      { id: 'alg_stiletto_manut', cat: 'Alongamento', nome: 'Stiletto (Manutenção)', preco: 165, duracao: 120 },
 
-      { id: 's17', cat: 'Decorações', nome: 'Esmaltação em Gel', preco: 40.00, tempo: 45 },
-      { id: 's18', cat: 'Decorações', nome: 'Encapsuladas', preco: 50.00, tempo: 45 },
-      { id: 's19', cat: 'Decorações', nome: 'Reversa (por unha)', preco: 30.00, tempo: 30 },
-      { id: 's20', cat: 'Decorações', nome: 'Pedrarias (par)', preco: 15.00, tempo: 15 },
+      // BANHO DE GEL
+      { id: 'bnh_gel', cat: 'Banho de Gel', nome: 'Banho de Gel', preco: 140, duracao: 90 },
+      { id: 'bnh_blindagem_maos', cat: 'Banho de Gel', nome: 'Blindagem Mãos', preco: 80, duracao: 60 },
+      { id: 'bnh_blindagem_pes', cat: 'Banho de Gel', nome: 'Blindagem Pés', preco: 75, duracao: 60 },
 
-      { id: 's21', cat: 'Cobranças à Parte', nome: 'Reposição Fibra', preco: 25.00, tempo: 20 },
-      { id: 's22', cat: 'Cobranças à Parte', nome: 'Realinhamento', preco: 55.00, tempo: 45 },
-      { id: 's23', cat: 'Cobranças à Parte', nome: 'Retirada', preco: 95.00, tempo: 60 },
-      { id: 's24', cat: 'Cobranças à Parte', nome: 'Troca de Formato', preco: 55.00, tempo: 45 },
-      { id: 's25', cat: 'Cobranças à Parte', nome: 'Conserto (por unha)', preco: 30.00, tempo: 20 },
-      { id: 's26', cat: 'Cobranças à Parte', nome: 'Combinho', preco: 55.00, tempo: 45 },
+      // MANICURE & PEDICURE
+      { id: 'mani_simples', cat: 'Mani & Pedi', nome: 'Manicure Simples', preco: 35, duracao: 40 },
+      { id: 'mani_decorada', cat: 'Mani & Pedi', nome: 'Manicure Decorada', preco: 40, duracao: 50 },
+      { id: 'pedi_simples', cat: 'Mani & Pedi', nome: 'Pedicure Simples', preco: 45, duracao: 45 },
+      { id: 'pedi_decorada', cat: 'Mani & Pedi', nome: 'Pedicure Decorada', preco: 50, duracao: 55 },
+      { id: 'spa_pes', cat: 'Mani & Pedi', nome: 'Spa dos Pés', preco: 85, duracao: 60 },
+
+      // DECORAÇÕES
+      { id: 'dec_esmalte_gel', cat: 'Decorações', nome: 'Esmaltação em Gel', preco: 40, duracao: 30 },
+      { id: 'dec_encapsulada', cat: 'Decorações', nome: 'Encapsuladas', preco: 50, duracao: 40 },
+      { id: 'dec_reversa', cat: 'Decorações', nome: 'Reversa (por unha)', preco: 30, duracao: 20 },
+      { id: 'dec_pedrarias', cat: 'Decorações', nome: 'Pedrarias (par)', preco: 15, duracao: 15 },
+
+      // COBRANÇAS À PARTE
+      { id: 'cob_reposicao', cat: 'Outros', nome: 'Reposição Fibra', preco: 25, duracao: 20 },
+      { id: 'cob_realinhamento', cat: 'Outros', nome: 'Realinhamento', preco: 55, duracao: 40 },
+      { id: 'cob_retirada', cat: 'Outros', nome: 'Retirada', preco: 95, duracao: 60 },
+      { id: 'cob_troca_formato', cat: 'Outros', nome: 'Troca de Formato', preco: 55, duracao: 40 },
+      { id: 'cob_conserto', cat: 'Outros', nome: 'Conserto (por unha)', preco: 30, duracao: 20 },
+      { id: 'cob_combinho', cat: 'Outros', nome: 'Combinho', preco: 55, duracao: 40 }
     ];
 
     // ESTADO DA APLICAÇÃO
-    let agendamentos = JSON.parse(localStorage.getItem('ma_agendamentos')) || [];
-    let estoque = JSON.parse(localStorage.getItem('ma_estoque')) || [
-      { id: 'e1', nome: 'Gel UV Vòlia Clear', qtd: 4, min: 2 },
-      { id: 'e2', nome: 'Top Coat Selante', qtd: 2, min: 2 },
-      { id: 'e3', nome: 'Lixa Banana 100/180', qtd: 12, min: 5 },
-      { id: 'e4', nome: 'Prep Higienizador', qtd: 1, min: 2 },
-    ];
-    let gastos = JSON.parse(localStorage.getItem('ma_gastos')) || [];
-
-    let agendamentoEmConclusaoId = null;
-
-    // INICIALIZAÇÃO AO CARREGAR A PÁGINA
-    window.onload = function() {
-      const hojeStr = new Date().toISOString().split('T')[0];
-      document.getElementById('dataAgendamento').value = hojeStr;
-      document.getElementById('filtroDataAgenda').value = hojeStr;
-      document.getElementById('dataGasto').value = hojeStr;
-
-      renderizarServicosForm();
-      renderizarTudo();
+    let appState = {
+      agendamentos: [],
+      estoque: [],
+      gastos: []
     };
 
-    // TROCA DE ABAS
-    function trocarAba(aba) {
+    let agendamentoSelecionadoId = null;
+    let chartFinanceiroInstance = null;
+
+    // INICIALIZAÇÃO
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('filtroDataAgenda').value = hoje;
+      document.getElementById('agData').value = hoje;
+      document.getElementById('regData').value = hoje;
+      document.getElementById('gastoData').value = hoje;
+
+      const mesAtual = hoje.substring(0, 7);
+      document.getElementById('filtroMesDash').value = mesAtual;
+
+      renderizarOpcoesServicosForm();
+      conectarFirebaseEmTempoReal();
+      verificarDadosLocaisParaMigracao();
+    });
+
+    // CONEXÃO FIREBASE (SINCRO EM TEMPO REAL)
+    function conectarFirebaseEmTempoReal() {
+      db.ref('studio_data').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          appState.agendamentos = data.agendamentos ? Object.values(data.agendamentos) : [];
+          appState.estoque = data.estoque ? Object.values(data.estoque) : [];
+          appState.gastos = data.gastos ? Object.values(data.gastos) : [];
+        } else {
+          carregarDadosIniciaisEstoqueSeVazio();
+        }
+        atualizarTudo();
+      });
+    }
+
+    function salvarNuvem() {
+      db.ref('studio_data').set(appState);
+    }
+
+    // CARREGAR ESTOQUE INICIAL SE ESTIVER VAZIO
+    function carregarDadosIniciaisEstoqueSeVazio() {
+      if (appState.estoque.length === 0) {
+        appState.estoque = [
+          { id: '1', nome: 'Gel UV Construtor', qtd: 4, min: 2 },
+          { id: '2', nome: 'Top Coat Brilho', qtd: 3, min: 2 },
+          { id: '3', nome: 'Prep Desidratador', qtd: 2, min: 1 },
+          { id: '4', nome: 'Lixa Banana 100/180', qtd: 15, min: 5 }
+        ];
+        salvarNuvem();
+      }
+    }
+
+    // MIGRAÇÃO DE DADOS LOCAIS DO MACBOOK
+    function verificarDadosLocaisParaMigracao() {
+      const agLocal = localStorage.getItem('ma_agendamentos');
+      if (agLocal) {
+        document.getElementById('btnImportar').classList.remove('hidden');
+      }
+    }
+
+    function importarDadosLocais() {
+      if (confirm("Deseja importar as clientes e registros salvos localmente neste computador para a nuvem?")) {
+        const ag = JSON.parse(localStorage.getItem('ma_agendamentos') || '[]');
+        const est = JSON.parse(localStorage.getItem('ma_estoque') || '[]');
+        const gst = JSON.parse(localStorage.getItem('ma_gastos') || '[]');
+
+        appState.agendamentos = [...appState.agendamentos, ...ag];
+        appState.estoque = [...appState.estoque, ...est];
+        appState.gastos = [...appState.gastos, ...gst];
+
+        salvarNuvem();
+        localStorage.clear();
+        document.getElementById('btnImportar').classList.add('hidden');
+        alert("Dados migrados com sucesso para a nuvem!");
+      }
+    }
+
+    // NAVEGAÇÃO ENTRE ABAS
+    function mudarAba(aba) {
       ['agenda', 'estoque', 'gastos', 'dashboard'].forEach(a => {
-        document.getElementById(`conteudo-${a}`).classList.add('hidden');
-        const btn = document.getElementById(`tab-${a}`);
-        btn.classList.remove('active');
-        btn.classList.add('text-studioText/70');
+        document.getElementById(`aba-${a}`).classList.add('hidden');
+        document.getElementById(`tab-${a}`).classList.remove('active');
       });
 
-      document.getElementById(`conteudo-${aba}`).classList.remove('hidden');
-      const btnAtivo = document.getElementById(`tab-${aba}`);
-      btnAtivo.classList.add('active');
-      btnAtivo.classList.remove('text-studioText/70');
+      document.getElementById(`aba-${aba}`).classList.remove('hidden');
+      document.getElementById(`tab-${aba}`).classList.add('active');
 
       if (aba === 'dashboard') {
         renderizarDashboard();
       }
     }
 
-    // RENDERIZAR CHECKBOXES DE SERVIÇOS
-    function renderizarServicosForm() {
-      const container = document.getElementById('listaServicosCheckout');
-      container.innerHTML = '';
+    // RENDERIZAR OPÇÕES DE SERVIÇOS NOS FORMULÁRIOS
+    function renderizarOpcoesServicosForm() {
+      const containerAg = document.getElementById('gridServicosForm');
+      const containerReg = document.getElementById('gridServicosRegForm');
 
-      let catAtual = '';
-      SERVICOS_OFICIAIS.forEach(serv => {
-        if (serv.cat !== catAtual) {
-          catAtual = serv.cat;
-          const headerCat = document.createElement('div');
-          headerCat.className = 'font-bold text-[10px] text-gold-600 uppercase tracking-wider pt-1 border-b border-nude-100';
-          headerCat.innerText = catAtual;
-          container.appendChild(headerCat);
-        }
-
-        const item = document.createElement('label');
-        item.className = 'flex items-center justify-between p-1.5 rounded-lg hover:bg-nude-50 cursor-pointer transition';
-        item.innerHTML = `
-          <div class="flex items-center gap-2">
-            <input type="checkbox" value="${serv.id}" onchange="recalcularTotaisServicos()" class="checkbox-servico accent-gold-500 w-3.5 h-3.5">
-            <span class="font-medium text-studioText">${serv.nome}</span>
-          </div>
-          <span class="font-bold text-studioText/80">R$ ${serv.preco.toFixed(2)}</span>
+      let html = '';
+      TABELA_SERVICOS.forEach(s => {
+        html += `
+          <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-stone-200 hover:border-amber-400 cursor-pointer text-xs">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" value="${s.id}" data-preco="${s.preco}" data-duracao="${s.duracao}" onchange="calcularTotaisServicosForm()" class="chk-servico custom-checkbox w-4 h-4 rounded">
+              <span class="font-semibold text-stone-800">${s.nome}</span>
+            </div>
+            <span class="font-bold text-amber-900">R$ ${s.preco}</span>
+          </label>
         `;
-        container.appendChild(item);
       });
+
+      containerAg.innerHTML = html;
+
+      let htmlReg = html.replace(/chk-servico/g, 'chk-servico-reg').replace(/calcularTotaisServicosForm/g, 'calcularTotaisServicosRegForm');
+      containerReg.innerHTML = htmlReg;
     }
 
-    // RECALCULAR DURAÇÃO E VALOR AUTOMÁTICOS (LIBERADO PARA EDIÇÃO)
-    function recalcularTotaisServicos() {
-      const checkboxes = document.querySelectorAll('.checkbox-servico:checked');
+    // CÁLCULOS DOS SERVIÇOS SELECIONADOS NO AGENDAMENTO
+    function calcularTotaisServicosForm() {
+      const checkboxes = document.querySelectorAll('.chk-servico:checked');
       let valorTotal = 0;
-      let tempoTotal = 0;
+      let duracaoTotal = 0;
 
-      checkboxes.forEach(cb => {
-        const serv = SERVICOS_OFICIAIS.find(s => s.id === cb.value);
-        if (serv) {
-          valorTotal += serv.preco;
-          tempoTotal += serv.tempo;
+      checkboxes.forEach(c => {
+        valorTotal += parseFloat(c.getAttribute('data-preco'));
+        duracaoTotal += parseInt(c.getAttribute('data-duracao'));
+      });
+
+      document.getElementById('agDuracao').value = duracaoTotal || 60;
+      document.getElementById('lblValorTotalForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
+      document.getElementById('lblValorTotalForm').setAttribute('data-valor', valorTotal);
+    }
+
+    function calcularTotaisServicosRegForm() {
+      const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
+      let valorTotal = 0;
+      checkboxes.forEach(c => {
+        valorTotal += parseFloat(c.getAttribute('data-preco'));
+      });
+      document.getElementById('lblValorTotalRegForm').innerText = `R$ ${valorTotal.toFixed(2)}`;
+      document.getElementById('lblValorTotalRegForm').setAttribute('data-valor', valorTotal);
+    }
+
+    function atualizarResumoValoresForm() {
+      // Permite que a Millena edite a duração livremente
+    }
+
+    // BUSCA DE CONTATOS DO MACBOOK / CELULAR
+    async function buscarContatoCliente() {
+      if ('contacts' in navigator && 'select' in navigator.contacts) {
+        try {
+          const contacts = await navigator.contacts.select(['name', 'tel'], { multiple: false });
+          if (contacts.length > 0) {
+            document.getElementById('agNome').value = contacts[0].name[0] || '';
+            if (contacts[0].tel && contacts[0].tel.length > 0) {
+              document.getElementById('agTelefone').value = contacts[0].tel[0].replace(/\D/g, '');
+            }
+          }
+        } catch (e) {
+          console.log("Busca de contatos cancelada ou não suportada diretamente.");
         }
-      });
-
-      document.getElementById('valorTotalAuto').value = valorTotal.toFixed(2);
-      document.getElementById('duracaoMinutos').value = tempoTotal;
+      } else {
+        const nomeDig = prompt("Digite o nome da cliente para buscar no histórico:");
+        if (nomeDig) {
+          const achada = appState.agendamentos.find(a => a.cliente.toLowerCase().includes(nomeDig.toLowerCase()));
+          if (achada) {
+            document.getElementById('agNome').value = achada.cliente;
+            document.getElementById('agTelefone').value = achada.telefone || '';
+          } else {
+            document.getElementById('agNome').value = nomeDig;
+          }
+        }
+      }
     }
 
-    // CHECK DOUBLE BOOKING
-    function checarChoqueHorario(data, horaInicio, duracaoMin, idIgnorar = null) {
-      const startNew = new Date(`${data}T${horaInicio}`);
-      const endNew = new Date(startNew.getTime() + duracaoMin * 60000);
-
-      return agendamentos.some(app => {
-        if (app.id === idIgnorar || app.data !== data || app.status === 'cancelado') return false;
-
-        const startApp = new Date(`${app.data}T${app.hora}`);
-        const endApp = new Date(startApp.getTime() + app.duracao * 60000);
-
-        return (startNew < endApp && endNew > startApp);
-      });
-    }
-
-    // SALVAR NOVO AGENDAMENTO
+    // 1. SALVAR NOVO AGENDAMENTO (FUTURO - PENDENTE)
     function salvarAgendamento(e) {
       e.preventDefault();
 
-      const cliente = document.getElementById('nomeCliente').value.trim();
-      const data = document.getElementById('dataAgendamento').value;
-      const hora = document.getElementById('horaAgendamento').value;
-      const duracao = parseInt(document.getElementById('duracaoMinutos').value);
-      const valor = parseFloat(document.getElementById('valorTotalAuto').value);
-
-      const checkboxes = document.querySelectorAll('.checkbox-servico:checked');
+      const checkboxes = document.querySelectorAll('.chk-servico:checked');
       if (checkboxes.length === 0) {
-        alert('Por favor, selecione pelo menos um procedimento.');
+        alert("Selecione pelo menos um serviço!");
         return;
       }
 
       const servicosNomes = [];
-      checkboxes.forEach(cb => {
-        const s = SERVICOS_OFICIAIS.find(item => item.id === cb.value);
-        if (s) servicosNomes.push(s.nome);
+      checkboxes.forEach(c => {
+        const item = TABELA_SERVICOS.find(s => s.id === c.value);
+        if (item) servicosNomes.push(item.nome);
       });
 
-      if (checarChoqueHorario(data, hora, duracao)) {
-        alert('⚠️ Horário Ocupado! Já existe um atendimento agendado neste intervalo.');
-        return;
-      }
-
-      const novoAgendamento = {
+      const novo = {
         id: Date.now().toString(),
-        cliente,
-        servicos: servicosNomes,
-        data,
-        hora,
-        duracao,
-        valor,
-        pagamento: null,
-        status: 'agendado',
+        cliente: document.getElementById('agNome').value,
+        telefone: document.getElementById('agTelefone').value,
+        data: document.getElementById('agData').value,
+        hora: document.getElementById('agHora').value,
+        duracao: parseInt(document.getElementById('agDuracao').value),
+        servicos: servicosNomes.join(' + '),
+        valor: parseFloat(document.getElementById('lblValorTotalForm').getAttribute('data-valor') || 0),
+        status: 'Pendente',
+        pagamento: '',
         isRetorno: false
       };
 
-      agendamentos.push(novoAgendamento);
-      salvarTudo();
-      renderizarAgenda();
-
-      document.getElementById('formAgendamento').reset();
-      document.querySelectorAll('.checkbox-servico').forEach(cb => cb.checked = false);
-      recalcularTotaisServicos();
+      appState.agendamentos.push(novo);
+      salvarNuvem();
+      fecharModalAgendamento();
+      document.getElementById('filtroDataAgenda').value = novo.data;
+      atualizarTudo();
     }
 
-    // MÁSCARA / CÁLCULO DE HORA FINAL
-    function calcularHoraFim(horaStr, duracaoMin) {
-      const [h, m] = horaStr.split(':').map(Number);
-      const end = new Date(0, 0, 0, h, m + duracaoMin);
-      return `${String(end.getHours()).padStart(2, '0')}:${String(end.getMinutes()).padStart(2, '0')}`;
-    }
-
-    // RENDERIZAR AGENDA
-    function renderizarAgenda() {
-      const filtroData = document.getElementById('filtroDataAgenda').value;
-      const container = document.getElementById('containerGradeAgenda');
-      container.innerHTML = '';
-
-      const filtrados = agendamentos
-        .filter(app => app.data === filtroData && app.status !== 'cancelado')
-        .sort((a, b) => a.hora.localeCompare(b.hora));
-
-      if (filtrados.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-10 text-studioText/50 text-xs">
-            Nenhum atendimento agendado para esta data.
-          </div>
-        `;
+    // 2. REGISTRAR ATENDIMENTO JÁ CONCLUÍDO (DIRETO)
+    function salvarRegistroDireto(e) {
+      e.preventDefault();
+      const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
+      if (checkboxes.length === 0) {
+        alert("Selecione pelo menos um serviço realizado!");
         return;
       }
 
-      filtrados.forEach(app => {
-        const horaFim = calcularHoraFim(app.hora, app.duracao);
-        const card = document.createElement('div');
-        
-        const isConcluido = app.status === 'concluido';
-        card.className = `p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition ${
-          isConcluido ? 'bg-emerald-50/60 border-emerald-200' : 'bg-white/90 border-nude-200'
-        }`;
-
-        card.innerHTML = `
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span class="font-extrabold text-sm text-studioText">${app.hora} - ${horaFim}</span>
-              ${app.isRetorno ? `<span class="bg-gold-100 text-gold-600 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Retorno (15d)</span>` : ''}
-              ${isConcluido ? `<span class="bg-emerald-100 text-emerald-700 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Concluído</span>` : `<span class="bg-amber-100 text-amber-700 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase">Agendado</span>`}
-            </div>
-            <h4 class="font-bold text-xs text-studioText">${app.cliente}</h4>
-            <p class="text-[11px] text-studioText/70">${app.servicos.join(', ')} (${app.duracao} min)</p>
-            <p class="text-[11px] font-bold ${isConcluido ? 'text-emerald-600' : 'text-studioText/60'}">
-              R$ ${app.valor.toFixed(2)} ${app.pagamento ? `• ${app.pagamento}` : ' (Pendente)'}
-            </p>
-          </div>
-
-          <div class="flex items-center gap-2 border-t sm:border-t-0 pt-2 sm:pt-0 border-nude-100">
-            ${!isConcluido ? `
-              <button onclick="abrirModalConclusao('${app.id}')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs rounded-lg shadow-sm transition">
-                Concluir
-              </button>
-            ` : ''}
-            <button onclick="excluirAgendamento('${app.id}')" class="px-2.5 py-1.5 text-rose-600 hover:bg-rose-50 font-semibold text-xs rounded-lg transition">
-              Excluir
-            </button>
-          </div>
-        `;
-        container.appendChild(card);
+      const servicosNomes = [];
+      checkboxes.forEach(c => {
+        const item = TABELA_SERVICOS.find(s => s.id === c.value);
+        if (item) servicosNomes.push(item.nome);
       });
+
+      const novo = {
+        id: Date.now().toString(),
+        cliente: document.getElementById('regNome').value,
+        telefone: '',
+        data: document.getElementById('regData').value,
+        hora: '12:00',
+        duracao: 60,
+        servicos: servicosNomes.join(' + '),
+        valor: parseFloat(document.getElementById('lblValorTotalRegForm').getAttribute('data-valor') || 0),
+        status: 'Concluído',
+        pagamento: document.getElementById('regPagamento').value,
+        isRetorno: false
+      };
+
+      appState.agendamentos.push(novo);
+      salvarNuvem();
+      fecharModalRegistroDireto();
+      document.getElementById('filtroDataAgenda').value = novo.data;
+      atualizarTudo();
     }
 
-    // ABRIR MODAL DE CONCLUSÃO
-    function abrirModalConclusao(id) {
-      const app = agendamentos.find(a => a.id === id);
-      if (!app) return;
+    // CONCLUIR AGENDAMENTO E MARCAR RETORNO
+    function abrirConcluirAtendimento(id) {
+      agendamentoSelecionadoId = id;
+      const item = appState.agendamentos.find(a => a.id === id);
+      if (!item) return;
 
-      agendamentoEmConclusaoId = id;
-      document.getElementById('subtituloClienteModal').innerText = `${app.cliente} - R$ ${app.valor.toFixed(2)}`;
+      document.getElementById('descClienteConcluir').innerText = `${item.cliente} - ${item.servicos} (R$ ${item.valor.toFixed(2)})`;
 
-      // SUGERIR RETORNO PARA +15 DIAS
-      const dataAtual = new Date(`${app.data}T${app.hora}`);
-      const dataRetorno = new Date(dataAtual.getTime() + 15 * 24 * 60 * 60 * 1000);
-      document.getElementById('dataRetornoSugerida').value = dataRetorno.toISOString().split('T')[0];
-      document.getElementById('horaRetornoSugerida').value = app.hora;
+      // Data de retorno em 15 dias
+      const dataObj = new Date(item.data + 'T12:00:00');
+      dataObj.setDate(dataObj.getDate() + 15);
+      document.getElementById('retornoData').value = dataObj.toISOString().split('T')[0];
+      document.getElementById('retornoHora').value = item.hora;
 
-      document.getElementById('modalConclusao').classList.remove('hidden');
+      document.getElementById('modalConcluir').classList.remove('hidden');
     }
 
-    function fecharModalConclusao() {
-      agendamentoEmConclusaoId = null;
-      document.getElementById('modalConclusao').classList.add('hidden');
-    }
+    function confirmarConclusaoAtendimento() {
+      const item = appState.agendamentos.find(a => a.id === agendamentoSelecionadoId);
+      if (item) {
+        item.status = 'Concluído';
+        item.pagamento = document.getElementById('concluirPagamento').value;
 
-    function toggleOpcoesRetorno() {
-      const check = document.getElementById('checkAgendarRetorno').checked;
-      document.getElementById('boxOpcoesRetorno').style.display = check ? 'block' : 'none';
-    }
-
-    // CONFIRMAR CONCLUSÃO + RETORNO
-    function confirmarConclusaoEAgendarRetorno() {
-      if (!agendamentoEmConclusaoId) return;
-
-      const app = agendamentos.find(a => a.id === agendamentoEmConclusaoId);
-      if (!app) return;
-
-      const pagamento = document.getElementById('pagamentoConclusao').value;
-      app.pagamento = pagamento;
-      app.status = 'concluido'; // O VALOR ENTRA OFICIALMENTE NO FATURAMENTO AQUI!
-
-      // AGENDAR RETORNO SE MARCADO
-      const querRetorno = document.getElementById('checkAgendarRetorno').checked;
-      if (querRetorno) {
-        const dataRetorno = document.getElementById('dataRetornoSugerida').value;
-        const horaRetorno = document.getElementById('horaRetornoSugerida').value;
-
-        if (checarChoqueHorario(dataRetorno, horaRetorno, app.duracao)) {
-          alert('⚠️ O horário do retorno sugerido já possui agendamento. O atendimento principal foi concluído, mas ajuste a data/hora do retorno.');
-        } else {
-          const retornoAgendamento = {
-            id: Date.now().toString(),
-            cliente: app.cliente,
-            servicos: app.servicos.map(s => s.replace('Alongamento', 'Manutenção')),
-            data: dataRetorno,
-            hora: horaRetorno,
-            duracao: app.duracao,
-            valor: app.valor,
-            pagamento: null,
-            status: 'agendado',
+        // Se marcou retorno para 15 dias
+        if (document.getElementById('chkAgendarRetorno').checked) {
+          const retorno = {
+            id: (Date.now() + 1).toString(),
+            cliente: item.cliente,
+            telefone: item.telefone,
+            data: document.getElementById('retornoData').value,
+            hora: document.getElementById('retornoHora').value,
+            duracao: item.duracao,
+            servicos: `${item.servicos} (Retorno 15 dias)`,
+            valor: item.valor,
+            status: 'Pendente',
+            pagamento: '',
             isRetorno: true
           };
-          agendamentos.push(retornoAgendamento);
+          appState.agendamentos.push(retorno);
         }
-      }
 
-      salvarTudo();
-      renderizarAgenda();
-      fecharModalConclusao();
+        salvarNuvem();
+        fecharModalConcluir();
+        atualizarTudo();
+      }
     }
 
+    function toggleFormRetorno() {
+      const chk = document.getElementById('chkAgendarRetorno').checked;
+      document.getElementById('formRetorno15Dias').style.display = chk ? 'grid' : 'none';
+    }
+
+    // EXCLUIR AGENDAMENTO
     function excluirAgendamento(id) {
-      if (confirm('Deseja cancelar/excluir este agendamento?')) {
-        agendamentos = agendamentos.filter(a => a.id !== id);
-        salvarTudo();
-        renderizarAgenda();
+      if (confirm("Deseja realmente remover este agendamento?")) {
+        appState.agendamentos = appState.agendamentos.filter(a => a.id !== id);
+        salvarNuvem();
+        atualizarTudo();
       }
     }
 
-    // --- ABA ESTOQUE ---
-    function cadastrarMaterial(e) {
-      e.preventDefault();
-      const nome = document.getElementById('nomeMaterial').value.trim();
-      const qtd = parseInt(document.getElementById('qtdMaterial').value);
-      const min = parseInt(document.getElementById('minMaterial').value);
+    // RENDERIZAR AGENDA DO DIA
+    function renderizarAgenda() {
+      const dataFiltro = document.getElementById('filtroDataAgenda').value;
+      const listaContainer = document.getElementById('listaAgendamentos');
+      
+      const filtrados = appState.agendamentos
+        .filter(a => a.data === dataFiltro)
+        .sort((a, b) => a.hora.localeCompare(b.hora));
 
-      estoque.push({
-        id: Date.now().toString(),
-        nome,
-        qtd,
-        min
+      let qtdAgendados = filtrados.length;
+      let qtdConcluidos = filtrados.filter(a => a.status === 'Concluído').length;
+      let valorPendente = filtrados.filter(a => a.status === 'Pendente').reduce((acc, a) => acc + a.valor, 0);
+      let valorConcluido = filtrados.filter(a => a.status === 'Concluído').reduce((acc, a) => acc + a.valor, 0);
+
+      document.getElementById('statQtdAgendados').innerText = qtdAgendados;
+      document.getElementById('statQtdConcluidos').innerText = qtdConcluidos;
+      document.getElementById('statValorPendente').innerText = `R$ ${valorPendente.toFixed(2)}`;
+      document.getElementById('statValorConcluido').innerText = `R$ ${valorConcluido.toFixed(2)}`;
+
+      if (filtrados.length === 0) {
+        listaContainer.innerHTML = `<p class="text-center text-sm text-stone-500 py-6">Nenhum atendimento agendado para esta data.</p>`;
+        return;
+      }
+
+      let html = '';
+      filtrados.forEach(a => {
+        const isConcluido = a.status === 'Concluído';
+        const horaFim = calcularHoraFim(a.hora, a.duracao);
+
+        html += `
+          <div class="p-4 rounded-2xl ${isConcluido ? 'bg-emerald-50/90 border border-emerald-200' : 'bg-white border border-stone-200'} shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-bold text-stone-900">${a.hora} às ${horaFim}</span>
+                ${a.isRetorno ? '<span class="text-[10px] bg-amber-200 text-amber-900 font-bold px-2 py-0.5 rounded-full">Retorno 15d</span>' : ''}
+                <span class="text-[10px] ${isConcluido ? 'bg-emerald-200 text-emerald-900' : 'bg-stone-200 text-stone-700'} font-bold px-2 py-0.5 rounded-full">${a.status}</span>
+              </div>
+              <p class="text-base font-extrabold text-stone-800">${a.cliente}</p>
+              <p class="text-xs text-stone-600 font-medium">${a.servicos} (${a.duracao} min)</p>
+              <p class="text-sm font-black text-amber-900">R$ ${a.valor.toFixed(2)} ${isConcluido ? `<span class="text-xs text-stone-500 font-normal">(${a.pagamento})</span>` : ''}</p>
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-2 sm:pt-0">
+              ${a.telefone ? `
+                <a href="https://wa.me/55${a.telefone}?text=Olá%20${encodeURIComponent(a.cliente)},%20confirmado%20seu%20horário%20no%20Studio%20Millena%20Aguiar!" target="_blank" class="p-2 bg-emerald-100 text-emerald-800 rounded-xl hover:bg-emerald-200" title="Abrir WhatsApp">
+                  <i data-lucide="message-circle" class="w-4 h-4"></i>
+                </a>
+              ` : ''}
+
+              ${!isConcluido ? `
+                <button onclick="abrirConcluirAtendimento('${a.id}')" class="bg-emerald-700 text-white text-xs font-bold px-3 py-2 rounded-xl hover:bg-emerald-800 transition-all flex items-center gap-1">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i> Concluir
+                </button>
+              ` : ''}
+
+              <button onclick="excluirAgendamento('${a.id}')" class="p-2 text-stone-400 hover:text-rose-600" title="Excluir">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
       });
 
-      salvarTudo();
+      listaContainer.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    // AUXILIAR HORA FIM
+    function calcularHoraFim(horaInicio, min) {
+      if (!horaInicio) return '';
+      const [h, m] = horaInicio.split(':').map(Number);
+      const totalMin = h * 60 + m + min;
+      const hFim = Math.floor(totalMin / 60) % 24;
+      const mFim = totalMin % 60;
+      return `${String(hFim).padStart(2, '0')}:${String(mFim).padStart(2, '0')}`;
+    }
+
+    // ESTOQUE - SALVAR NOVO E EXCLUIR
+    function salvarNovoMaterial(e) {
+      e.preventDefault();
+      const novo = {
+        id: Date.now().toString(),
+        nome: document.getElementById('matNome').value,
+        qtd: parseInt(document.getElementById('matQtd').value),
+        min: parseInt(document.getElementById('matMin').value)
+      };
+      appState.estoque.push(novo);
+      salvarNuvem();
+      document.getElementById('matNome').value = '';
+      document.getElementById('matQtd').value = '';
+      document.getElementById('matMin').value = '';
       renderizarEstoque();
-      document.getElementById('formEstoque').reset();
     }
 
     function alterarQtdEstoque(id, delta) {
-      const item = estoque.find(e => e.id === id);
+      const item = appState.estoque.find(e => e.id === id);
       if (item) {
         item.qtd = Math.max(0, item.qtd + delta);
-        salvarTudo();
+        salvarNuvem();
         renderizarEstoque();
       }
     }
 
     function excluirMaterialEstoque(id) {
-      if (confirm('Deseja excluir este material do estoque?')) {
-        estoque = estoque.filter(e => e.id !== id);
-        salvarTudo();
+      if (confirm("Tem certeza que deseja excluir definitivamente este insumo do estoque?")) {
+        appState.estoque = appState.estoque.filter(e => e.id !== id);
+        salvarNuvem();
         renderizarEstoque();
       }
     }
 
     function renderizarEstoque() {
-      const container = document.getElementById('gridEstoque');
-      container.innerHTML = '';
+      const container = document.getElementById('listaEstoque');
+      if (appState.estoque.length === 0) {
+        container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4 col-span-2">Nenhum material cadastrado.</p>`;
+        return;
+      }
 
-      estoque.forEach(item => {
-        const baixo = item.qtd <= item.min;
-        const card = document.createElement('div');
-        card.className = `p-3.5 rounded-xl border flex flex-col justify-between ${
-          baixo ? 'bg-rose-50/60 border-rose-200' : 'bg-white/90 border-nude-200'
-        }`;
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-start justify-between gap-1 mb-1">
-              <h4 class="font-bold text-xs text-studioText">${item.nome}</h4>
-              ${baixo ? `<span class="text-[8px] bg-rose-100 text-rose-700 font-extrabold px-1.5 py-0.5 rounded uppercase">Baixo</span>` : ''}
+      let html = '';
+      appState.estoque.forEach(e => {
+        const baixo = e.qtd <= e.min;
+        html += `
+          <div class="p-3 bg-white rounded-xl border ${baixo ? 'border-rose-400 bg-rose-50/40' : 'border-stone-200'} flex items-center justify-between">
+            <div>
+              <p class="font-bold text-stone-800 text-sm">${e.nome}</p>
+              <p class="text-xs ${baixo ? 'text-rose-600 font-bold' : 'text-stone-500'}">Status: ${e.qtd} un (Mín: ${e.min})</p>
             </div>
-            <p class="text-[10px] text-studioText/60">Mínimo: ${item.min} uni.</p>
-          </div>
-
-          <div class="flex items-center justify-between mt-3 pt-2 border-t border-nude-100">
-            <span class="text-sm font-extrabold text-studioText">${item.qtd} <span class="text-[10px] font-medium text-studioText/60">uni</span></span>
             <div class="flex items-center gap-1">
-              <button onclick="alterarQtdEstoque('${item.id}', -1)" class="w-6 h-6 rounded bg-nude-100 hover:bg-nude-200 font-bold text-xs flex items-center justify-center">-</button>
-              <button onclick="alterarQtdEstoque('${item.id}', 1)" class="w-6 h-6 rounded bg-gold-500 hover:bg-gold-600 text-white font-bold text-xs flex items-center justify-center">+</button>
-              <button onclick="excluirMaterialEstoque('${item.id}')" class="w-6 h-6 rounded bg-rose-100 hover:bg-rose-200 text-rose-600 font-bold text-xs flex items-center justify-center ml-1">
-                <i class="fa-solid fa-trash text-[10px]"></i>
+              <button onclick="alterarQtdEstoque('${e.id}', -1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg hover:bg-stone-200 text-stone-800 text-sm">-</button>
+              <span class="w-6 text-center font-bold text-sm">${e.qtd}</span>
+              <button onclick="alterarQtdEstoque('${e.id}', 1)" class="w-7 h-7 bg-stone-100 font-bold rounded-lg hover:bg-stone-200 text-stone-800 text-sm">+</button>
+              <button onclick="excluirMaterialEstoque('${e.id}')" class="ml-2 text-stone-400 hover:text-rose-600 p-1" title="Excluir produto">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
         `;
-        container.appendChild(card);
       });
+      container.innerHTML = html;
+      lucide.createIcons();
     }
 
-    // --- ABA GASTOS ---
-    function cadastrarGasto(e) {
+    // GASTOS - SALVAR E EXCLUIR
+    function salvarGasto(e) {
       e.preventDefault();
-      const desc = document.getElementById('descGasto').value.trim();
-      const cat = document.getElementById('catGasto').value;
-      const valor = parseFloat(document.getElementById('valorGasto').value);
-      const data = document.getElementById('dataGasto').value;
-
-      gastos.push({
+      const novo = {
         id: Date.now().toString(),
-        desc,
-        cat,
-        valor,
-        data
-      });
-
-      salvarTudo();
+        descricao: document.getElementById('gastoDesc').value,
+        valor: parseFloat(document.getElementById('gastoValor').value),
+        categoria: document.getElementById('gastoCategoria').value,
+        data: document.getElementById('gastoData').value
+      };
+      appState.gastos.push(novo);
+      salvarNuvem();
+      document.getElementById('gastoDesc').value = '';
+      document.getElementById('gastoValor').value = '';
       renderizarGastos();
-      document.getElementById('formGastos').reset();
-      document.getElementById('dataGasto').value = new Date().toISOString().split('T')[0];
     }
 
     function excluirGasto(id) {
-      if (confirm('Deseja excluir este gasto?')) {
-        gastos = gastos.filter(g => g.id !== id);
-        salvarTudo();
+      if (confirm("Excluir este lançamento de gasto?")) {
+        appState.gastos = appState.gastos.filter(g => g.id !== id);
+        salvarNuvem();
         renderizarGastos();
       }
     }
 
     function renderizarGastos() {
       const container = document.getElementById('listaGastos');
-      container.innerHTML = '';
-
-      if (gastos.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-xs text-studioText/50">Nenhum gasto registrado.</div>`;
+      if (appState.gastos.length === 0) {
+        container.innerHTML = `<p class="text-center text-sm text-stone-500 py-4">Nenhum gasto registrado.</p>`;
         return;
       }
 
-      gastos.sort((a,b) => b.data.localeCompare(a.data)).forEach(g => {
-        const item = document.createElement('div');
-        item.className = 'p-3 rounded-xl bg-white/90 border border-nude-200 flex items-center justify-between';
-        item.innerHTML = `
-          <div>
-            <h4 class="font-bold text-xs text-studioText">${g.desc}</h4>
-            <p class="text-[10px] text-studioText/60">${g.cat} • ${g.data.split('-').reverse().join('/')}</p>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="font-extrabold text-xs text-rose-600">- R$ ${g.valor.toFixed(2)}</span>
-            <button onclick="excluirGasto('${g.id}')" class="text-rose-500 hover:text-rose-700 text-xs">
-              <i class="fa-solid fa-trash"></i>
-            </button>
+      let html = '';
+      appState.gastos.sort((a,b) => b.data.localeCompare(a.data)).forEach(g => {
+        html += `
+          <div class="p-3 bg-white rounded-xl border border-stone-200 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-stone-800 text-sm">${g.descricao}</p>
+              <p class="text-xs text-stone-500">${g.categoria} • ${g.data.split('-').reverse().join('/')}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-extrabold text-rose-700 text-sm">R$ ${g.valor.toFixed(2)}</span>
+              <button onclick="excluirGasto('${g.id}')" class="text-stone-400 hover:text-rose-600">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
           </div>
         `;
-        container.appendChild(item);
       });
+      container.innerHTML = html;
+      lucide.createIcons();
     }
 
-    // --- DASHBOARD FINANCEIRO & CANVAS (FATURAMENTO REAL) ---
+    // DASHBOARD FINANCEIRO E GRÁFICOS
     function renderizarDashboard() {
-      // APENAS SERVIÇOS CONCLUÍDOS ENTRAM NO CÁLCULO
-      const concluidos = agendamentos.filter(a => a.status === 'concluido');
-      const totalFaturamento = concluidos.reduce((sum, a) => sum + a.valor, 0);
-      const totalGastos = gastos.reduce((sum, g) => sum + g.valor, 0);
-      const lucroLiquido = totalFaturamento - totalGastos;
+      const mesFiltro = document.getElementById('filtroMesDash').value;
 
-      document.getElementById('dashFaturamento').innerText = `R$ ${totalFaturamento.toFixed(2)}`;
-      document.getElementById('dashGastos').innerText = `R$ ${totalGastos.toFixed(2)}`;
+      // REGRA DE FATURAMENTO: Apenas Atendimentos CONCLUÍDOS
+      const receitaTotal = appState.agendamentos
+        .filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro))
+        .reduce((acc, a) => acc + a.valor, 0);
+
+      const gastosTotais = appState.gastos
+        .filter(g => g.data.startsWith(mesFiltro))
+        .reduce((acc, g) => acc + g.valor, 0);
+
+      const lucroLiquido = receitaTotal - gastosTotais;
+
+      document.getElementById('dashReceita').innerText = `R$ ${receitaTotal.toFixed(2)}`;
+      document.getElementById('dashGastos').innerText = `R$ ${gastosTotais.toFixed(2)}`;
       document.getElementById('dashLucro').innerText = `R$ ${lucroLiquido.toFixed(2)}`;
 
-      // DISTRIBUIÇÃO PAGAMENTOS
-      const pagamentos = { Pix: 0, Crédito: 0, Débito: 0, Dinheiro: 0 };
-      concluidos.forEach(c => {
-        if (c.pagamento && pagamentos[c.pagamento] !== undefined) {
-          pagamentos[c.pagamento] += c.valor;
-        }
-      });
+      // Formas de Pagamento
+      const pagMap = { 'Pix': 0, 'Cartão de Crédito': 0, 'Cartão de Débito': 0, 'Dinheiro': 0 };
+      appState.agendamentos
+        .filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro))
+        .forEach(a => {
+          if (pagMap[a.pagamento] !== undefined) pagMap[a.pagamento] += a.valor;
+        });
 
-      const containerPag = document.getElementById('listaFormasPagamentoDash');
-      containerPag.innerHTML = '';
-      Object.keys(pagamentos).forEach(m => {
-        const val = pagamentos[m];
-        const pct = totalFaturamento > 0 ? ((val / totalFaturamento) * 100).toFixed(0) : 0;
-
-        const row = document.createElement('div');
-        row.className = 'space-y-1';
-        row.innerHTML = `
-          <div class="flex justify-between text-xs font-semibold">
-            <span>${m}</span>
-            <span class="font-bold">R$ ${val.toFixed(2)} (${pct}%)</span>
-          </div>
-          <div class="w-full h-2 bg-nude-100 rounded-full overflow-hidden">
-            <div class="h-full bg-gold-500 rounded-full" style="width: ${pct}%"></div>
+      let htmlPag = '';
+      Object.keys(pagMap).forEach(k => {
+        htmlPag += `
+          <div class="p-3 bg-stone-50 rounded-xl border text-center">
+            <p class="text-xs text-stone-500 font-semibold">${k}</p>
+            <p class="text-sm font-bold text-stone-800 mt-1">R$ ${pagMap[k].toFixed(2)}</p>
           </div>
         `;
-        containerPag.appendChild(row);
       });
+      document.getElementById('listaFormasPagamento').innerHTML = htmlPag;
 
-      // DESENHAR GRÁFICO CANVAS
-      desenharGrafico(totalFaturamento, totalGastos);
+      // Gráfico Canvas Chart.js
+      const ctx = document.getElementById('chartFinanceiro').getContext('2d');
+      if (chartFinanceiroInstance) chartFinanceiroInstance.destroy();
+
+      chartFinanceiroInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Entradas (Concluídas)', 'Saídas (Gastos)', 'Lucro Líquido'],
+          datasets: [{
+            data: [receitaTotal, gastosTotais, lucroLiquido],
+            backgroundColor: ['#10B981', '#F43F5E', '#D97706'],
+            borderRadius: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
     }
 
-    function desenharGrafico(faturamento, gastos) {
-      const canvas = document.getElementById('chartReceitaGastos');
-      const ctx = canvas.getContext('2d');
-      
-      canvas.width = canvas.parentElement.clientWidth;
-      canvas.height = 200;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const maxVal = Math.max(faturamento, gastos, 100) * 1.2;
-      const barWidth = Math.min(60, canvas.width / 4);
-      const gap = 40;
-      const startX = (canvas.width - (barWidth * 2 + gap)) / 2;
-      const basey = canvas.height - 30;
-
-      // Barra Receita Real
-      const hFat = (faturamento / maxVal) * (canvas.height - 60);
-      ctx.fillStyle = '#10B981';
-      ctx.beginPath();
-      ctx.roundRect(startX, basey - hFat, barWidth, hFat, [8, 8, 0, 0]);
-      ctx.fill();
-
-      ctx.fillStyle = '#2C2825';
-      ctx.font = 'bold 11px Montserrat';
-      ctx.textAlign = 'center';
-      ctx.fillText(`R$ ${faturamento.toFixed(0)}`, startX + barWidth / 2, basey - hFat - 8);
-      ctx.fillText('Receitas Reais', startX + barWidth / 2, basey + 18);
-
-      // Barra Gastos
-      const hGas = (gastos / maxVal) * (canvas.height - 60);
-      ctx.fillStyle = '#F43F5E';
-      ctx.beginPath();
-      ctx.roundRect(startX + barWidth + gap, basey - hGas, barWidth, hGas, [8, 8, 0, 0]);
-      ctx.fill();
-
-      ctx.fillStyle = '#2C2825';
-      ctx.fillText(`R$ ${gastos.toFixed(0)}`, startX + barWidth + gap + barWidth / 2, basey - hGas - 8);
-      ctx.fillText('Gastos', startX + barWidth + gap + barWidth / 2, basey + 18);
+    // MODAIS CONTROLE
+    function abrirModalAgendamento() {
+      document.getElementById('modalAgendamento').classList.remove('hidden');
+    }
+    function fecharModalAgendamento() {
+      document.getElementById('modalAgendamento').classList.add('hidden');
+    }
+    function abrirModalRegistroDireto() {
+      document.getElementById('modalRegistroDireto').classList.remove('hidden');
+    }
+    function fecharModalRegistroDireto() {
+      document.getElementById('modalRegistroDireto').classList.add('hidden');
+    }
+    function fecharModalConcluir() {
+      document.getElementById('modalConcluir').classList.add('hidden');
     }
 
-    // SALVAR TUDO
-    function salvarTudo() {
-      localStorage.setItem('ma_agendamentos', JSON.stringify(agendamentos));
-      localStorage.setItem('ma_estoque', JSON.stringify(estoque));
-      localStorage.setItem('ma_gastos', JSON.stringify(gastos));
-    }
-
-    function renderizarTudo() {
+    // ATUALIZAÇÃO GERAL
+    function atualizarTudo() {
       renderizarAgenda();
       renderizarEstoque();
       renderizarGastos();
+      renderizarDashboard();
     }
   </script>
 </body>

@@ -24,44 +24,48 @@
       color: #2D2623;
     }
 
-    /* Fundo Dual Clássico: Topo Branco, Base Bege Nude e LED Neon Dourado */
+    /* Fundo Dual com Transição Orgânica baseada na parede real */
     .studio-bg {
-      background: linear-gradient(180deg, 
-        #FFFFFF 0%, 
-        #FFFFFF 280px, 
-        #D8C4B6 281px, 
-        #CBB5A5 100%);
+      background: #D8C4B6; /* Fundo base bege nude */
       min-height: 100vh;
       position: relative;
     }
 
-    .led-neon-gold {
-      position: absolute;
-      top: 280px;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: #FFD700;
-      box-shadow: 
-        0 0 10px #FFD700,
-        0 0 20px #FFD700,
-        0 0 30px #E6C200,
-        0 0 40px #B8860B;
-      z-index: 10;
+    /* Topo Branco Orgânico simulando a parede superior */
+    .wall-white-top {
+      background: #FFFFFF;
+      padding-bottom: 50px;
+      position: relative;
+    }
+
+    /* Onda de LED Neon Dourada Idêntica à Foto da Parede */
+    .led-wave-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      position: relative;
+      margin-top: -15px;
+    }
+
+    .led-wave-divider svg {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 65px;
     }
 
     /* Vidro Efeito Apple (Glassmorphism) */
     .apple-card {
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
     .apple-card-dark {
-      background: rgba(45, 38, 35, 0.9);
+      background: rgba(45, 38, 35, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -103,60 +107,79 @@
 </head>
 <body class="studio-bg pb-12">
 
-  <div class="led-neon-gold"></div>
+  <!-- TOPO BRANCO COM O LOGOTIPO IDÊNTICO À PLACA REAL -->
+  <div class="wall-white-top shadow-sm">
+    <header class="pt-8 pb-2 px-4 max-w-4xl mx-auto text-center relative z-20">
+      
+      <!-- Logotipo Fiel à Placa: Cursivo "ma", Nome e Linha com "NAIL DESIGNER" -->
+      <div class="flex flex-col items-center justify-center">
+        <svg width="240" height="95" viewBox="0 0 240 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Monograma "ma" caligráfico elegante -->
+          <path d="M45 48C55 48 62 22 76 22C85 22 81 48 95 48C105 48 110 24 121 24C128 24 133 48 152 48" stroke="url(#goldGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M68 34C75 26 91 26 99 34" stroke="url(#goldGrad)" stroke-width="3.5" stroke-linecap="round"/>
+          
+          <!-- Texto MILLENA AGUIAR -->
+          <text x="120" y="69" font-family="'Plus Jakarta Sans', sans-serif" font-size="14.5" font-weight="700" fill="#3E2723" letter-spacing="4" text-anchor="middle">MILLENA AGUIAR</text>
+          
+          <!-- Linha divisória e tag NAIL DESIGNER -->
+          <line x1="28" y1="81" x2="112" y2="81" stroke="#3E2723" stroke-width="1.5"/>
+          <text x="162" y="83.5" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#3E2723" letter-spacing="1.5" text-anchor="middle">NAIL DESIGNER</text>
+          <line x1="212" y1="81" x2="212" y2="81" stroke="#3E2723" stroke-width="1.5"/>
 
-  <!-- Cabeçalho Principal (Topo Branco com Logotipo Caligráfico "ma" Corrigido e Nítido) -->
-  <header class="pt-8 pb-6 px-4 max-w-4xl mx-auto text-center relative z-20">
-    <!-- Logotipo MA Cursivo SVG Redesenhado com alta definição -->
-    <div class="flex justify-center mb-2">
-      <svg width="140" height="65" viewBox="0 0 140 65" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 44C26 44 32 16 46 16C54 16 51 44 64 44C73 44 77 20 86 20C92 20 96 44 118 44" stroke="url(#goldGradient)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M34 32C41 24 55 24 62 32" stroke="url(#goldGradient)" stroke-width="4" stroke-linecap="round"/>
-        <defs>
-          <linearGradient id="goldGradient" x1="0" y1="0" x2="140" y2="65" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#C5A059"/>
-            <stop offset="0.5" stop-color="#FFD700"/>
-            <stop offset="1" stop-color="#996515"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
-    
-    <h1 class="text-xl font-bold tracking-widest text-amber-900 uppercase">Millena Aguiar</h1>
-    <p class="text-xs tracking-[0.25em] text-amber-800/80 font-semibold mt-0.5">S T U D I O</p>
+          <defs>
+            <linearGradient id="goldGrad" x1="0" y1="0" x2="240" y2="95" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#C5A059"/>
+              <stop offset="0.5" stop-color="#FFD700"/>
+              <stop offset="1" stop-color="#996515"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
 
-    <!-- Sincronização / Botão de Migração do Mac -->
-    <div class="mt-4 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
-      <span class="inline-flex items-center gap-1.5 bg-white/90 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
-        <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
-        <span>Nuvem Conectada</span>
-      </span>
-      <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
-        📥 Sincronizar Cadastros do Mac
-      </button>
-    </div>
-  </header>
+      <!-- Sincronização / Botão de Migração do Mac -->
+      <div class="mt-2 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
+        <span class="inline-flex items-center gap-1.5 bg-amber-50 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
+          <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
+          <span>Nuvem Conectada</span>
+        </span>
+        <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
+          📥 Sincronizar Cadastros do Mac
+        </button>
+      </div>
+    </header>
+  </div>
 
-  <!-- Navegação Principal (Segmented Control Original) -->
-  <nav class="max-w-2xl mx-auto px-4 mb-6 relative z-20">
-    <div class="segmented-nav">
-      <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
-        <i data-lucide="calendar" class="w-4 h-4"></i> Agenda
-      </button>
-      <button onclick="mudarAba('estoque')" id="tab-estoque" class="flex items-center justify-center gap-1.5">
-        <i data-lucide="package" class="w-4 h-4"></i> Estoque
-      </button>
-      <button onclick="mudarAba('gastos')" id="tab-gastos" class="flex items-center justify-center gap-1.5">
-        <i data-lucide="receipt" class="w-4 h-4"></i> Gastos
-      </button>
-      <button onclick="mudarAba('dashboard')" id="tab-dashboard" class="flex items-center justify-center gap-1.5">
-        <i data-lucide="pie-chart" class="w-4 h-4"></i> Financeiro
-      </button>
-    </div>
-  </nav>
+  <!-- ONDA DE LED NEON DOURADA (Transição Exata da Foto) -->
+  <div class="led-wave-divider">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <!-- Brilho Glow do LED -->
+      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45 L1200,0 L0,0 Z" fill="#FFD700" opacity="0.4" filter="blur(8px)"></path>
+      <!-- Filamento Central do LED Neon -->
+      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45" fill="none" stroke="#FFF7CC" stroke-width="4"></path>
+      <path d="M0,0 C150,90 350,-20 500,60 C650,140 900,10 1200,45" fill="none" stroke="#FFD700" stroke-width="2.5"></path>
+    </svg>
+  </div>
 
   <!-- CONTEÚDO PRINCIPAL (Na Base Bege/Nude) -->
-  <main class="max-w-4xl mx-auto px-4 relative z-20">
+  <main class="max-w-4xl mx-auto px-4 relative z-20 mt-2">
+
+    <!-- Navegação Principal (Segmented Control) -->
+    <nav class="max-w-2xl mx-auto px-0 mb-6 relative z-20">
+      <div class="segmented-nav">
+        <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
+          <i data-lucide="calendar" class="w-4 h-4"></i> Agenda
+        </button>
+        <button onclick="mudarAba('estoque')" id="tab-estoque" class="flex items-center justify-center gap-1.5">
+          <i data-lucide="package" class="w-4 h-4"></i> Estoque
+        </button>
+        <button onclick="mudarAba('gastos')" id="tab-gastos" class="flex items-center justify-center gap-1.5">
+          <i data-lucide="receipt" class="w-4 h-4"></i> Gastos
+        </button>
+        <button onclick="mudarAba('dashboard')" id="tab-dashboard" class="flex items-center justify-center gap-1.5">
+          <i data-lucide="pie-chart" class="w-4 h-4"></i> Financeiro
+        </button>
+      </div>
+    </nav>
 
     <!-- 1. ABA AGENDA -->
     <section id="aba-agenda" class="space-y-6">
@@ -956,7 +979,7 @@
       document.getElementById('dashLucro').innerText = `R$ ${lucroLiquido.toFixed(2)}`;
 
       const pagMap = { 'Pix': 0, 'Cartão de Crédito': 0, 'Cartão de Débito': 0, 'Dinheiro': 0 };
-      appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFirlto)).forEach(a => {
+      appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro)).forEach(a => {
         if (pagMap[a.pagamento] !== undefined) pagMap[a.pagamento] += a.valor;
       });
 

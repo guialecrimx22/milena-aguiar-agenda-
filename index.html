@@ -24,7 +24,7 @@
       color: #2D2623;
     }
 
-    /* Fundo Dual: Topo Branco, Base Bege Nude e LED Neon Dourado */
+    /* Fundo Dual Clássico: Topo Branco, Base Bege Nude e LED Neon Dourado */
     .studio-bg {
       background: linear-gradient(180deg, 
         #FFFFFF 0%, 
@@ -105,18 +105,18 @@
 
   <div class="led-neon-gold"></div>
 
-  <!-- Cabeçalho Principal (Topo Branco com Logotipo Caligráfico "ma") -->
+  <!-- Cabeçalho Principal (Topo Branco com Logotipo Caligráfico "ma" Corrigido e Nítido) -->
   <header class="pt-8 pb-6 px-4 max-w-4xl mx-auto text-center relative z-20">
-    <!-- Logotipo MA Cursivo SVG Perfeito em Ouro -->
+    <!-- Logotipo MA Cursivo SVG Redesenhado com alta definição -->
     <div class="flex justify-center mb-2">
-      <svg width="110" height="55" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 40C24 40 30 18 42 18C50 18 47 40 58 40C66 40 70 22 78 22C84 22 87 40 102 40" stroke="url(#goldGradient)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M30 30C36 24 48 24 54 30" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linecap="round"/>
+      <svg width="140" height="65" viewBox="0 0 140 65" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 44C26 44 32 16 46 16C54 16 51 44 64 44C73 44 77 20 86 20C92 20 96 44 118 44" stroke="url(#goldGradient)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M34 32C41 24 55 24 62 32" stroke="url(#goldGradient)" stroke-width="4" stroke-linecap="round"/>
         <defs>
-          <linearGradient id="goldGradient" x1="0" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#D4AF37"/>
+          <linearGradient id="goldGradient" x1="0" y1="0" x2="140" y2="65" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#C5A059"/>
             <stop offset="0.5" stop-color="#FFD700"/>
-            <stop offset="1" stop-color="#AA771C"/>
+            <stop offset="1" stop-color="#996515"/>
           </linearGradient>
         </defs>
       </svg>
@@ -956,7 +956,7 @@
       document.getElementById('dashLucro').innerText = `R$ ${lucroLiquido.toFixed(2)}`;
 
       const pagMap = { 'Pix': 0, 'Cartão de Crédito': 0, 'Cartão de Débito': 0, 'Dinheiro': 0 };
-      appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFiltro)).forEach(a => {
+      appState.agendamentos.filter(a => a.status === 'Concluído' && a.data.startsWith(mesFirlto)).forEach(a => {
         if (pagMap[a.pagamento] !== undefined) pagMap[a.pagamento] += a.valor;
       });
 

@@ -117,12 +117,19 @@
       </svg>
     </div>
 
-    <!-- Indicador de Salvamento Local -->
-    <div class="mt-2 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
+    <!-- Indicador de Salvamento Ativo com Botão de Backup -->
+    <div class="mt-2 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
       <span class="inline-flex items-center gap-1.5 bg-white/90 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
         <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
-        <span>Salvamento Automático Seguro Ativo</span>
+        <span>Salvamento Blindado Ativo</span>
       </span>
+      <button onclick="exportarBackup()" class="bg-amber-800 text-white px-3 py-1 rounded-full text-xs hover:bg-amber-900 transition-all shadow-sm flex items-center gap-1">
+        💾 Baixar Backup
+      </button>
+      <label class="bg-stone-800 text-white px-3 py-1 rounded-full text-xs hover:bg-black transition-all shadow-sm cursor-pointer flex items-center gap-1">
+        📂 Restaurar Backup
+        <input type="file" id="fileBackup" accept=".json" onchange="importarBackup(event)" class="hidden">
+      </label>
     </div>
   </header>
 
@@ -479,7 +486,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT DO SISTEMA COM LOCALSTORAGE SEGURO -->
+  <!-- SCRIPT DO SISTEMA COM PERSISTÊNCIA ROBUSTA -->
   <script>
     const TABELA_SERVICOS = [
       { id: 'alg_quadrada', cat: 'Alongamento', nome: 'Quadrada (Colocação)', preco: 275, duracao: 150 },
@@ -548,9 +555,45 @@
     });
 
     function salvarDadosLocais() {
-      localStorage.setItem('ma_agendamentos', JSON.stringify(appState.agendamentos));
-      localStorage.setItem('ma_estoque', JSON.stringify(appState.estoque));
-      localStorage.setItem('ma_gastos', JSON.stringify(appState.gastos));
+      try {
+        localStorage.setItem('ma_agendamentos', JSON.stringify(appState.agendamentos));
+        localStorage.setItem('ma_estoque', JSON.stringify(appState.estoque));
+        localStorage.setItem('ma_gastos', JSON.stringify(appState.gastos));
+      } catch (e) {
+        alert("Aviso: O armazenamento local está cheio ou restrito.");
+      }
+    }
+
+    function exportarBackup() {
+      const dadosStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dadosStr);
+      downloadAnchor.setAttribute("download", `backup_millena_aguiar_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importarBackup(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const conteudo = JSON.parse(e.target.result);
+          if (conteudo.agendamentos) {
+            appState = conteudo;
+            salvarDadosLocais();
+            atualizarTudo();
+            alert("Backup restaurado com sucesso!");
+          } else {
+            alert("Arquivo de backup inválido.");
+          }
+        } catch (err) {
+          alert("Erro ao ler o arquivo de backup.");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function mudarAba(aba) {

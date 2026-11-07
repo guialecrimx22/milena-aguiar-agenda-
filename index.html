@@ -25,7 +25,7 @@
       color: #2D2623;
     }
 
-    /* Layout Clássico do dia 05/11 */
+    /* Layout Clássico com Divisão de Fundo */
     .studio-bg {
       background: linear-gradient(180deg, 
         #FFFFFF 0%, 
@@ -101,23 +101,16 @@
 
   <div class="led-neon-gold"></div>
 
-  <!-- Cabeçalho Principal com o Logotipo Exato da Placa em Vetor Nítido -->
+  <!-- Cabeçalho Principal com o Logotipo Exato da Placa -->
   <header class="pt-6 pb-6 px-4 max-w-4xl mx-auto text-center relative z-20">
     <div class="flex flex-col items-center justify-center">
-      <!-- Logotipo Fiel à Placa da Cliente -->
       <svg width="220" height="85" viewBox="0 0 220 85" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Linhas e monograma 'ma' cursivo fiel -->
         <path d="M22 28 C 45 42, 65 14, 88 14 C 105 14, 98 42, 118 42 C 132 42, 142 16, 158 16 C 172 16, 185 40, 202 40" stroke="url(#goldGradient)" stroke-width="3.2" stroke-linecap="round"/>
         <path d="M72 24 C 79 18, 93 18, 100 24" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linecap="round"/>
-        
-        <!-- Texto MILLENA AGUIAR -->
         <text x="110" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="13.5" font-weight="700" fill="#3E2723" letter-spacing="3.8" text-anchor="middle">MILLENA AGUIAR</text>
-        
-        <!-- Linha divisória e tag NAIL DESIGNER -->
         <line x1="28" y1="73" x2="100" y2="73" stroke="#3E2723" stroke-width="1.2"/>
         <text x="135" y="75" font-family="'Plus Jakarta Sans', sans-serif" font-size="7.5" font-weight="700" fill="#3E2723" letter-spacing="1.2" text-anchor="middle">NAIL DESIGNER</text>
         <line x1="170" y1="73" x2="192" y2="73" stroke="#3E2723" stroke-width="1.2"/>
-
         <defs>
           <linearGradient id="goldGradient" x1="0" y1="0" x2="220" y2="85" gradientUnits="userSpaceOnUse">
             <stop stop-color="#C5A059"/>
@@ -128,19 +121,16 @@
       </svg>
     </div>
 
-    <!-- Sincronização / Botão de Migração do Mac -->
+    <!-- Indicador de Nuvem Conectada -->
     <div class="mt-2 flex items-center justify-center gap-2 text-xs font-semibold text-amber-900/90">
       <span class="inline-flex items-center gap-1.5 bg-white/90 border border-amber-300 px-3 py-1 rounded-full shadow-sm">
-        <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-amber-700"></i>
-        <span>Nuvem Conectada</span>
+        <i data-lucide="cloud-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+        <span>Nuvem Sincronizada em Tempo Real</span>
       </span>
-      <button onclick="importarDadosLocaisDoMac()" id="btnImportarMac" class="hidden bg-amber-800 text-white px-3.5 py-1 rounded-full text-xs hover:bg-amber-900 shadow-md transition-all flex items-center gap-1">
-        📥 Sincronizar Cadastros do Mac
-      </button>
     </div>
   </header>
 
-  <!-- Navegação Principal (Segmented Control Original) -->
+  <!-- Navegação Principal -->
   <nav class="max-w-2xl mx-auto px-4 mb-6 relative z-20">
     <div class="segmented-nav">
       <button onclick="mudarAba('agenda')" id="tab-agenda" class="active flex items-center justify-center gap-1.5">
@@ -324,7 +314,7 @@
 
   </main>
 
-  <!-- MODAL 1: NOVO AGENDAMENTO (FUTURO - PENDENTE) -->
+  <!-- MODAL 1: NOVO AGENDAMENTO -->
   <div id="modalAgendamento" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 border-b pb-3">
@@ -368,7 +358,6 @@
           </div>
         </div>
 
-        <!-- CAMPO DE VALOR EDITÁVEL PARA PARCERIAS -->
         <div class="grid grid-cols-2 gap-3 bg-amber-50 p-3 rounded-xl border border-amber-200">
           <div>
             <label class="block text-xs font-semibold text-amber-900 mb-1">Duração Total (min)</label>
@@ -388,7 +377,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: REGISTRO DIRETO DE ATENDIMENTO CONCLUÍDO -->
+  <!-- MODAL 2: REGISTRO DIRETO -->
   <div id="modalRegistroDireto" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto border-t-4 border-t-emerald-600">
       <div class="flex items-center justify-between mb-4 border-b pb-3">
@@ -427,9 +416,8 @@
           </div>
         </div>
 
-        <!-- CAMPO DE VALOR EDITÁVEL NO REGISTRO -->
         <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center">
-          <span class="text-xs font-bold text-emerald-900">Total a Receber (Editável para Parcerias):</span>
+          <span class="text-xs font-bold text-emerald-900">Total a Receber (Editável):</span>
           <input type="number" step="0.01" id="regValorInput" required placeholder="0.00" class="w-32 bg-white border border-emerald-300 rounded-xl px-2 py-1 text-base font-black text-emerald-900 text-right outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
 
@@ -546,7 +534,6 @@
 
       renderizarOpcoesServicosForm();
       conectarFirebaseEmTempoReal();
-      verificarDadosLocaisMac();
     });
 
     function conectarFirebaseEmTempoReal() {
@@ -576,30 +563,6 @@
           { id: '4', nome: 'Lixa Banana 100/180', qtd: 15, min: 5 }
         ];
         salvarNuvem();
-      }
-    }
-
-    function verificarDadosLocaisMac() {
-      const agLocal = localStorage.getItem('ma_agendamentos');
-      if (agLocal) {
-        document.getElementById('btnImportarMac').classList.remove('hidden');
-      }
-    }
-
-    function importarDadosLocaisDoMac() {
-      if (confirm("Deseja enviar todas as clientes já agendadas e registradas no seu MacBook para a Nuvem? Assim elas aparecerão no seu celular na mesma hora!")) {
-        const ag = JSON.parse(localStorage.getItem('ma_agendamentos') || '[]');
-        const est = JSON.parse(localStorage.getItem('ma_estoque') || '[]');
-        const gst = JSON.parse(localStorage.getItem('ma_gastos') || '[]');
-
-        appState.agendamentos = [...appState.agendamentos, ...ag];
-        appState.estoque = [...appState.estoque, ...est];
-        appState.gastos = [...appState.gastos, ...gst];
-
-        salvarNuvem();
-        localStorage.clear();
-        document.getElementById('btnImportarMac').classList.add('hidden');
-        alert("Pronto! Seus agendamentos do Mac foram salvos na nuvem com sucesso!");
       }
     }
 

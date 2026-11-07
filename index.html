@@ -377,7 +377,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: REGISTRO DIRETO -->
+  <!-- MODAL 2: REGISTRO DIRETO (COM HORÁRIO DE INÍCIO E DURAÇÃO AUTOMÁTICA) -->
   <div id="modalRegistroDireto" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="apple-card w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto border-t-4 border-t-emerald-600">
       <div class="flex items-center justify-between mb-4 border-b pb-3">
@@ -393,13 +393,17 @@
           <input type="text" id="regNome" placeholder="Nome da cliente" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Data do Atendimento</label>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Data</label>
             <input type="date" id="regData" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Forma de Pagamento</label>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Horário Início</label>
+            <input type="time" id="regHora" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Pagamento</label>
             <select id="regPagamento" required class="w-full bg-white border border-stone-300 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 outline-none">
               <option value="Pix">Pix</option>
               <option value="Cartão de Crédito">Cartão de Crédito</option>
@@ -416,9 +420,15 @@
           </div>
         </div>
 
-        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center">
-          <span class="text-xs font-bold text-emerald-900">Total a Receber (Editável):</span>
-          <input type="number" step="0.01" id="regValorInput" required placeholder="0.00" class="w-32 bg-white border border-emerald-300 rounded-xl px-2 py-1 text-base font-black text-emerald-900 text-right outline-none focus:ring-2 focus:ring-emerald-500">
+        <div class="grid grid-cols-2 gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200">
+          <div>
+            <label class="block text-xs font-semibold text-emerald-900 mb-1">Duração Total (min)</label>
+            <input type="number" id="regDuracao" min="15" step="5" required class="w-full bg-white border border-emerald-300 rounded-xl px-3 py-1.5 text-sm font-bold text-emerald-900 outline-none">
+          </div>
+          <div class="text-right">
+            <label class="block text-xs font-semibold text-emerald-900 mb-1">Valor a Receber (R$ Editável)</label>
+            <input type="number" step="0.01" id="regValorInput" required placeholder="0.00" class="w-full bg-white border border-emerald-300 rounded-xl px-3 py-1.5 text-sm font-black text-emerald-900 text-right outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
         </div>
 
         <div class="flex justify-end gap-2 pt-2">
@@ -526,9 +536,13 @@
       lucide.createIcons();
       
       const hoje = new Date().toISOString().split('T')[0];
+      const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
       document.getElementById('filtroDataAgenda').value = hoje;
       document.getElementById('agData').value = hoje;
+      document.getElementById('agHora').value = "13:00";
       document.getElementById('regData').value = hoje;
+      document.getElementById('regHora').value = horaAtual;
       document.getElementById('gastoData').value = hoje;
       document.getElementById('filtroMesDash').value = hoje.substring(0, 7);
 
@@ -585,7 +599,7 @@
         html += `
           <label class="flex items-center justify-between p-2 bg-white rounded-lg border border-stone-200 hover:border-amber-400 cursor-pointer text-xs">
             <div class="flex items-center gap-2">
-              <input type="checkbox" value="${s.id}" data-preco="${s.preco}" data-duracao="${s.duracao}" onchange="calcularTotaisServicosForm()" class="chk-servico custom-checkbox w-4 h-4 rounded">
+              <input type="checkbox" value="${s.id}" data-preco="${s.preco}" data-duracao="${s.duracao}" onchange="calcularTotaisServicosForm(); calcularTotaisServicosRegForm();" class="chk-servico custom-checkbox w-4 h-4 rounded">
               <span class="font-semibold text-stone-800">${s.nome}</span>
             </div>
             <span class="font-bold text-amber-900">R$ ${s.preco}</span>
@@ -593,7 +607,7 @@
         `;
       });
       containerAg.innerHTML = html;
-      containerReg.innerHTML = html.replace(/chk-servico/g, 'chk-servico-reg').replace(/calcularTotaisServicosForm/g, 'calcularTotaisServicosRegForm');
+      containerReg.innerHTML = html.replace(/chk-servico/g, 'chk-servico-reg');
     }
 
     function calcularTotaisServicosForm() {
@@ -609,8 +623,12 @@
 
     function calcularTotaisServicosRegForm() {
       const checkboxes = document.querySelectorAll('.chk-servico-reg:checked');
-      let valorTotal = 0;
-      checkboxes.forEach(c => { valorTotal += parseFloat(c.getAttribute('data-preco')); });
+      let valorTotal = 0, duracaoTotal = 0;
+      checkboxes.forEach(c => {
+        valorTotal += parseFloat(c.getAttribute('data-preco'));
+        duracaoTotal += parseInt(c.getAttribute('data-duracao'));
+      });
+      document.getElementById('regDuracao').value = duracaoTotal || 60;
       document.getElementById('regValorInput').value = valorTotal.toFixed(2);
     }
 
@@ -683,8 +701,8 @@
         cliente: document.getElementById('regNome').value,
         telefone: '',
         data: document.getElementById('regData').value,
-        hora: '12:00',
-        duracao: 60,
+        hora: document.getElementById('regHora').value,
+        duracao: parseInt(document.getElementById('regDuracao').value),
         servicos: servicosNomes.join(' + '),
         valor: valorDigitado,
         status: 'Concluído',
